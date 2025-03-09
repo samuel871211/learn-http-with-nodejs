@@ -1,4 +1,4 @@
 ---
 title: 關於本系列
-description: 我還沒想好
+description: Learn HTTP With NodeJS
 ---
