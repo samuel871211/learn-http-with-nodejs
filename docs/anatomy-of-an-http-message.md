@@ -155,3 +155,5 @@ function checkInvalidHeaderChar(val) {
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#anatomy_of_an_http_message
 - https://ithelp.ithome.com.tw/m/articles/10242682
 - https://ithelp.ithome.com.tw/m/articles/10353840
+
+<!-- todo 可補充 startline 更詳細 -->
