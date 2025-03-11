@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
     'http-1.1-HOL-blocking',
     'evolution-of-http',
     'origin-and-referer',
+    'referrer-policy',
     'content-type-and-mime-type',
     'content-and-accept-encoding',
     'http-caching-1',
