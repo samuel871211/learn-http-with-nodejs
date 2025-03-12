@@ -39,6 +39,84 @@ fetch("http://localhost:5000/", { method: "POST" });
 fetch("https://www.google.com/");
 ```
 
-可以觀察到 General > `Referrer Policy: no-referrer`，我們也可以得出一個結論，當 Response Header 有設定 `Referrer Policy`，就會覆寫瀏覽器的預設值
+可以觀察到 General > `Referrer Policy: no-referrer`，我們可以得出一個結論，當 Response Header 有設定 `Referrer Policy`，就會覆寫瀏覽器的預設值
 
 我們再繼續嘗試，如果在 fetch API 指定 `referrerPolicy`，這個優先級會高過 Response Header 設定的 `Referrer Policy` 嗎？
+
+```js
+fetch("http://localhost:5000/", { referrerPolicy: "origin" });
+fetch("http://localhost:5000/", { referrerPolicy: "origin", method: "POST" });
+fetch("https://www.google.com/", { referrerPolicy: "origin" });
+```
+
+可以觀察到 Request Headers > `referrer: http://localhost:5000/`，我們可以得出一個結論，優先順序: By 請求設定的 > Response Header 設定的 > 瀏覽器的預設值
+
+### HTML 也能設定 referrerPolicy？
+
+HTML meta 標籤可以設定全局的 `referrerPolicy`，作用就跟從 Response Header 設定是一樣的，我們調整一下 NodeJS 的程式碼:
+
+```js
+httpServer.on('request', (req, res) => {
+    res.setHeader("Content-Type", "text/html");
+    res.end(`<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="referrer" content="origin" />
+    </head>
+    <body>
+        <video src="https://youtu.be/79RLkH3T8hg?si=VcjfDcGujMj3ZXhU"></video>
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" />
+    </body>
+</html>`);
+});
+```
+
+可以看到請求圖片跟影片的 Request Headers 都有帶上 `referrer: http://localhost:5000/` 了
+
+![metaReferrerPolicyOrigin](../static/img/metaReferrerPolicyOrigin.jpg)
+
+另外還有一些常見的 HTML 標籤也都可以 By 請求設定 `referrerPolicy`，我們試著在 NodeJS 加入以下程式碼，並且打開 http://localhost:5000/test/?a=1&b=2
+
+```js
+httpServer.on('request', (req, res) => {
+    console.log(req.headers.referer);
+    res.setHeader("Content-Type", "text/html");
+    res.end(`<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="referrer" content="origin" />
+    </head>
+    <body>
+        <a href="http://localhost:5000/" target="_blank" referrerpolicy="unsafe-url">google</a>
+        <a href="http://localhost:5000/" target="_blank" rel="noreferrer">google</a>
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" referrerpolicy="no-referrer" />
+        <script src="https://unpkg.com/react@18/umd/react.development.js" referrerpolicy="no-referrer"></script>
+    </body>
+</html>`);
+});
+```
+
+點擊第一個超連結時，Server Log 預期會收到
+
+```
+http://localhost:5000/test/?a=1&b=2 
+http://localhost:5000/
+```
+
+
+第一個是 `<a href="http://localhost:5000/" target="_blank" referrerpolicy="unsafe-url">google</a>`
+
+第二個是瀏覽器請求 favicon.ico 會吃到全局的 `<meta name="referrer" content="origin" />`
+
+點擊第二個超連結時，Server Log 預期會收到
+
+```
+undefined
+http://localhost:5000/
+```
+
+第一個是 `<a href="http://localhost:5000/" target="_blank" rel="noreferrer">google</a>`
+
+第二個是瀏覽器請求 favicon.ico 會吃到全局的 `<meta name="referrer" content="origin" />`
+
+`<script>` 跟 `<img>` 也都符合預期，沒有發送 `referer`
