@@ -185,109 +185,168 @@ This prevents leaks of private data that may be accessible from other parts of t
 
 我們再來看看 referrer policy 還有哪些值，我們一樣以 http://localhost:5000/test?a=1&b=2 這個頁面發起請求
 
-1. `no-referrer`，完全不送 referer
+### 1. `no-referrer`
 
-我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+完全不送 referer
+
+我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "no-referrer" });
+fetch('http://localhost:5000', { referrerPolicy: "no-referrer", mode: "no-cors" });
 // 預期不會送 referer
-fetch('https://www.google.com', { referrerPolicy: "no-referrer" });
+fetch('https://www.google.com', { referrerPolicy: "no-referrer", mode: "no-cors" });
 ```
 
-2. `no-referrer-when-downgrade`，沒有 downgrade （這邊的 downgrade 指的是從 https > http 或 https > file） 的話就送完整 URL
+### 2. `no-referrer-when-downgrade`
 
-我們試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+downgrade（https > http 或 https > file） 情境就不送 referrer，反之就送完整 URL
+
+我們試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "no-referrer-when-downgrade" });
+fetch('http://localhost:5000', { referrerPolicy: "no-referrer-when-downgrade", mode: "no-cors" });
 // 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "no-referrer-when-downgrade" });
+fetch('https://www.google.com', { referrerPolicy: "no-referrer-when-downgrade", mode: "no-cors" });
 ```
 
-3. `origin`，不管怎樣，我就是只送 origin 拉！
+### 3. `origin`
 
-我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+不管怎樣，我就是只送 origin 拉！
+
+我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期會送 referer: http://localhost:5000/
-fetch('http://localhost:5000', { referrerPolicy: "origin" });
+fetch('http://localhost:5000', { referrerPolicy: "origin", mode: "no-cors" });
 // 預期會送 referer: http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "origin" });
+fetch('https://www.google.com', { referrerPolicy: "origin", mode: "no-cors" });
 ```
 
-我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期會送 referer: https://www.google.com/
-fetch('http://localhost:5000', { referrerPolicy: "origin" });
+fetch('http://localhost:5000', { referrerPolicy: "origin", mode: "no-cors" });
 // 預期會送 referer: https://www.google.com/
-fetch('https://www.google.com', { referrerPolicy: "origin" });
+fetch('https://www.google.com', { referrerPolicy: "origin", mode: "no-cors" });
 ```
 
-4. `origin-when-cross-origin`，同源的情況就送完整的 URL，反之只送 origin
+### 4. `origin-when-cross-origin`
 
-我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+同源的情況就送完整的 URL，反之只送 origin
+
+我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 同源 => 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
 // 跨域 => 預期會送 referer: http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin" });
+fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
 ```
 
-我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 跨域 => 預期會送 referer: https://www.google.com/
-fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
 // 同源 => 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin" });
+fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
 ```
 
-5. `same-origin`，同源的情況就送完整的 URL，反之就完全不送 referer
+### 5. `same-origin`
 
-我們試試看在 localhost:5000/test?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+同源的情況就送完整的 URL，反之就完全不送 referer
+
+我們試試看在 localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 同源 => 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "same-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "same-origin", mode: "no-cors" });
 // 跨域 => 預期不會送 referer
-fetch('https://www.google.com', { referrerPolicy: "same-origin" });
+fetch('https://www.google.com', { referrerPolicy: "same-origin", mode: "no-cors" });
 ```
 
-我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 跨域 => 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "same-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "same-origin", mode: "no-cors" });
 // 同源 => 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "same-origin" });
+fetch('https://www.google.com', { referrerPolicy: "same-origin", mode: "no-cors" });
 ```
 
-6. `strict-origin`，protocol 沒有 downgrade 的時候就送 origin，反之就不送
+### 6. `strict-origin`
 
-我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+protocol 沒有 downgrade 的時候就送 origin，反之就不送
+
+我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // protocol 沒有 downgrade => 預期會送 referer: http://localhost:5000/
-fetch('http://localhost:5000', { referrerPolicy: "strict-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "strict-origin", mode: "no-cors" });
 // protocol 沒有 downgrade => 預期會送 referer http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "strict-origin" });
+fetch('https://www.google.com', { referrerPolicy: "strict-origin", mode: "no-cors" });
 ```
 
-我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Network > Console 輸入
+我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // protocol downgrade => 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "strict-origin" });
+fetch('http://localhost:5000', { referrerPolicy: "strict-origin", mode: "no-cors" });
 // protocol 沒有 downgrade => 預期會送 referer: https://www.google.com/
-fetch('https://www.google.com', { referrerPolicy: "strict-origin" });
+fetch('https://www.google.com', { referrerPolicy: "strict-origin", mode: "no-cors" });
 ```
 
-7. `strict-origin-when-cross-origin` (default)，上面有講過了～
+### 7. `strict-origin-when-cross-origin` 
+
+這是瀏覽器的預設值，上面有講過了～
+
+### 8. `unsafe-url`
+
+不管怎樣，我就是送完整的 URL 拉！但會有資安疑慮，所以不建議設定這個
+
+我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
+
+```js
+// 預期會送 referer: http://localhost:5000/test?a=1&b=2
+fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+// 預期會送 referer: http://localhost:5000/test?a=1&b=2
+fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+```
+
+我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
+
+```js
+// 預期會送 referer: https://www.google.com/?a=1&b=2
+fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+// 預期會送 referer: https://www.google.com/?a=1&b=2
+fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+```
+
+我們試著使用剛剛建立的 `index.html`，直接用瀏覽器打開，應該會看到網址列顯示 `file:///Users/xxx/path-to/index.html`，打開 F12 > Console 輸入
+
+```js
+// 預期會送 referer: file:///Users/xxx/path-to/index.html
+fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+// 預期會送 referer: file:///Users/xxx/path-to/index.html
+fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+```
+
+實際打開 F12 > Network，發現完全沒有送 referer，這是怎麼回事？
+
+![unsafeURLNotWorkingWhenFileScheme](../static/img/unsafeURLNotWorkingWhenFileScheme.jpg)
+
+這其實是符合規範的行為，我們看看 W3C 的官方文件怎麼說
+
+https://w3c.github.io/webappsec-referrer-policy/#determine-requests-referrer
+
+```
+If document’s origin is an opaque origin, return no referrer.
+```
+
+上面也有提到，當使用 file scheme 時，origin 會是 null（opaque origin），所以這時候就直接不加上 `referer` request header 了
 
 ### 小結
 

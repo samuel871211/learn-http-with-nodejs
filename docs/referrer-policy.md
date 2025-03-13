@@ -3,6 +3,8 @@ title: 深入瞭解 Referrer Policy
 description: 深入瞭解 Referrer Policy
 ---
 
+### Response Header 也能設定 referrerPolicy？
+
 上一篇談到使用 fetch API 的參數來設定 `referrerPolicy`，現在要來談談如何從 Server Side 去設定，使用 NodeJS HTTP module 來實作簡易的 HTTP server，設定 `no-referrer`，並且載入跨域的圖片跟影片
 
 ```js
@@ -31,6 +33,8 @@ http://localhost:5000/ ，使用瀏覽器預設的 `Referrer Policy: strict-orig
 ![imageWithResponseReferrerPolicy](../static/img/imageWithResponseReferrerPolicy.jpg)
 ![videoWithResponseReferrerPolicy](../static/img/videoWithResponseReferrerPolicy.jpg)
 
+### fetch API 是否也會套用 Response Header 設定的 referrerPolicy？
+
 我們接著使用 fetch API，觀察 `Referrer Policy` 是否也變成 `no-referrer`
 
 ```js
@@ -40,6 +44,8 @@ fetch("https://www.google.com/");
 ```
 
 可以觀察到 General > `Referrer Policy: no-referrer`，我們可以得出一個結論，當 Response Header 有設定 `Referrer Policy`，就會覆寫瀏覽器的預設值
+
+### By Request 設定的 referrerPolicy，優先度會比較高嗎？
 
 我們再繼續嘗試，如果在 fetch API 指定 `referrerPolicy`，這個優先級會高過 Response Header 設定的 `Referrer Policy` 嗎？
 
@@ -75,7 +81,7 @@ httpServer.on('request', (req, res) => {
 
 ![metaReferrerPolicyOrigin](../static/img/metaReferrerPolicyOrigin.jpg)
 
-另外還有一些常見的 HTML 標籤也都可以 By 請求設定 `referrerPolicy`，我們試著在 NodeJS 加入以下程式碼，並且打開 http://localhost:5000/test/?a=1&b=2
+另外還有一些常見的 HTML 標籤也都可以 By 請求設定 `referrerPolicy`，例如 `<a>`, `<img>` 跟 `<script>`，我們試著在 NodeJS 加入以下程式碼，並且打開 http://localhost:5000/test/?a=1&b=2
 
 ```js
 httpServer.on('request', (req, res) => {
