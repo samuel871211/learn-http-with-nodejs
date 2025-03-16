@@ -126,3 +126,85 @@ http://localhost:5000/
 第二個是瀏覽器請求 favicon.ico 會吃到全局的 `<meta name="referrer" content="origin" />`
 
 `<script>` 跟 `<img>` 也都符合預期，沒有發送 `referer`
+
+### 從 Google Map Embed API 來了解 referrer-policy 的實務應用
+
+我們來創建一個 Google Map API Key
+
+https://developers.google.com/maps/documentation/javascript/get-api-key#create-api-keys
+
+點擊按鈕 "Go to the Credentials page"，如果你從來沒有玩過 Google Cloud Platform 的話，會需要先用 Google 帳號登入，然後綁定信用卡，但等等的範例不會真的收費。創建好之後，應該會拿到一組 `AIzaSyBqM4KkMcP5x5x7xR8j2Y9nL3Q2xXxXxXx` 的 Key
+
+我們進到 Edit API Key 的頁面
+
+![editGoogleMapAPIKey](../static/img/editGoogleMapAPIKey.jpg)
+
+設定 Website restrictions，限制只有 http://localhost:5000 可以存取
+
+![restrictGoogleMapAPIToWebsite](../static/img/restrictGoogleMapAPIToWebsite.jpg)
+
+https://developers.google.com/maps/documentation/embed/get-started
+
+接著我們參考 [Google Map Embed API 的官方文件](https://developers.google.com/maps/documentation/embed/get-started)，用 NodeJS HTTP Module 建立一個簡單的 HTML 頁面
+
+```js
+import { createServer } from 'http';
+const httpServer = createServer().listen(5000);
+httpServer.on('request', (req, res) => {
+    res.setHeader("Content-Type", "text/html");
+    res.end(`<iframe
+  width="600"
+  height="450"
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  referrerpolicy="no-referrer-when-downgrade"
+  src="https://www.google.com/maps/embed/v1/place?key=API_KEY
+    &q=Taipei+101">
+</iframe>`);
+});
+```
+
+用瀏覽器打開 http://localhost:5000/ ，應該就會看到 Google Map 成功載入了
+
+我們試試看把 Website restrictions 改成 https://www.google.com ，並且儲存
+
+![changeGoogleMapAPIKeyToOtherWebsite](../static/img/changeGoogleMapAPIKeyToOtherWebsite.jpg)
+
+儲存後，再度重整 http://localhost:5000/ ，這時候應該就會看到以下錯誤訊息
+
+```
+Google Maps Platform rejected your request. This IP, site or mobile application is not authorized to use this API key. Request received from IP address x.xxx.xx.xxx, with referer: http://localhost:5000/
+```
+
+結合我們之前學到的 `referrerPolicy`，我們可以修改 `<iframe referrerpolicy>`
+
+```js
+httpServer.on('request', (req, res) => {
+    res.setHeader("Content-Type", "text/html");
+    res.end(`<iframe
+  width="600"
+  height="450"
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  referrerpolicy="no-referrer"
+  src="https://www.google.com/maps/embed/v1/place?key=API_KEY
+    &q=Taipei+101">
+</iframe>`);
+});
+```
+
+再度重整 http://localhost:5000/ ，就可以看到 Google Map 又順利載入了！
+
+深入研究的話，還真的有人曾經回報這個問題給 google:
+
+https://issuetracker.google.com/issues/366168659
+
+但後來被標記為 Won't fix (Infeasible)，我覺得也合理，我個人推測的原因如下:
+
+1. 每個網站設定的 `referrerPolicy` 都不一樣，如果 Google 強行把判斷 `referer` 的規則變嚴格，會導致向後不兼容，依賴於 Google Map API 的網站就會壞掉
+
+2. Website restrictions 本來就不是唯一限制 API Key 安全性的手段，還有 API restrictions, URL Signing Secret 等等，都可以保護 API Key
+
+結論，多層的防禦總是比較安全，至少當前面幾層被攻破的時候，後面還有幾層可以保護！
