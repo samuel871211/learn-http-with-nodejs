@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
     'referrer-policy',
     'content-type-and-mime-type',
     'content-and-accept-encoding',
+    'web-rtc',
     'http-caching-1',
     'http-caching-2',
     'http-authentication',
