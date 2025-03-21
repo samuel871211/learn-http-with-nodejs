@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
     'origin-and-referer',
     'referrer-policy',
     'content-type-and-mime-type',
+    'server-sent-events',
     'content-and-accept-encoding',
     'web-rtc',
     'http-caching-1',
