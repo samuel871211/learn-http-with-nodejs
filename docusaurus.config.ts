@@ -5,12 +5,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
+  
   title: 'Learn HTTP With NodeJS',
-  // tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  tagline: `Let's Learn HTTP With NodeJS!!!`,
+  favicon: 'favicon/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://learn-http-with-nodejs.web.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -65,13 +66,12 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'favicon/android-chrome-512x512.png',
     navbar: {
       title: 'Learn HTTP With NodeJS',
       logo: {
         alt: 'Logo',
-        src: 'img/logo.svg',
+        src: 'favicon/android-chrome-512x512.png',
       },
       // items: [
       //   {
@@ -131,7 +131,7 @@ const config: Config = {
       //     ],
       //   },
       // ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Yusheng. All rights reserved. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
