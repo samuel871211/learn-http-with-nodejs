@@ -22,7 +22,6 @@ const sidebars: SidebarsConfig = {
     'anatomy-of-an-http-message',
     'keep-alive-and-connection',
     'http-1.1-HOL-blocking',
-    'evolution-of-http',
     'origin-and-referer',
     'referrer-policy',
     'content-type-and-mime-type',
@@ -52,6 +51,7 @@ const sidebars: SidebarsConfig = {
     'user-agent',
     'source-map',
     'http-observatory-report',
+    'evolution-of-http',
     'end',
     // {
     //   type: 'category',
