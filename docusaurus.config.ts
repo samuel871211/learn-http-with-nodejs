@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   
   title: 'Learn HTTP With NodeJS',
-  tagline: `Let's Learn HTTP With NodeJS!!!`,
+  tagline: 'Learn HTTP with NodeJS in 30 days!!!',
   favicon: 'favicon/favicon.ico',
 
   // Set the production url of your site here
