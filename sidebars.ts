@@ -52,6 +52,8 @@ const sidebars: SidebarsConfig = {
     'source-map',
     'http-observatory-report',
     'evolution-of-http',
+    'geojson',
+    'mqtt',
     'end',
     // {
     //   type: 'category',
