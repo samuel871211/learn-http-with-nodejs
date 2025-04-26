@@ -357,7 +357,34 @@ ArrayBuffer { [Uint8Contents]: <ff d8 ff e0>, byteLength: 4 }
  
 ### X-Content-Type-Options
 
-<!-- nosniffing -->
+上面有提到瀏覽器的 [MIME sniffing](#mime-sniffing) 機制，但有些情況，我們希望把這個機制禁用，這時候就會需要在 Response Header 設定 `X-Content-Type-Options: nosniff`
+
+我們利用剛才 [MIME sniffing](#mime-sniffing) 的程式碼繼續擴充，針對圖片回傳錯誤的 `Content-Type`，讓瀏覽器的 MIME sniffing 機制啟用，並且再加上 `X-Content-Type-Options: nosniff`
+
+```ts
+import httpServer from "../httpServer";
+import { faviconListener } from "../listeners/faviconListener";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const image = readFileSync(join(__dirname, 'image.jpg'));
+httpServer.on('request', function requestListener (req, res) {
+  if (req.url === "/favicon.ico") return faviconListener(req, res);
+  res.setHeader("Content-Type", "text/plain; charset=");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.end(image);
+});
+```
+
+這時候用瀏覽器打開 http://localhost:5000/ ，就會看到 MIME sniffing 的機制被禁用，因此產生一堆亂碼了
+
+![no-sniff](./../static/img/no-sniff.jpg)
+
+### 亂碼是怎麼產生的
+
+可參考這部影片，講解的非常清楚呦！
+
+https://youtu.be/zSstXi-j7Qc?si=iHu3ebTiF9YtaZmD
 
 ### 參考資料
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
