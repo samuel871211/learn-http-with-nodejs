@@ -78,7 +78,7 @@ httpServer.on('request', function requestListener (req, res) {
   const method = String(req.method).toLowerCase();
 
   if (req.url === "/") {
-    res.setHeader("Content-Type", "text/html; charset=utf8");
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(indexHTML);
     return;
   }
@@ -255,7 +255,7 @@ httpServer.on('request', function requestListener (req, res) {
   const method = String(req.method).toLowerCase();
   
   if (req.url === "/") {
-    res.setHeader("Content-Type", "text/html; charset=utf8");
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(indexHTML);
     return;
   }
