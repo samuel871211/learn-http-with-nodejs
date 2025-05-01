@@ -344,6 +344,8 @@ fetch("http://localhost:5000/sse")
 
 本篇 SSE 帶大家實作了各種情境，並且也解析了 SSE 的實際應用（AI 問答），希望大家收穫滿滿！
 
+<!-- todo-yusheng 研究 res.write 跟 res.end 差在哪 -->
+
 ### 參考資料
 
 - https://html.spec.whatwg.org/multipage/server-sent-events.html
