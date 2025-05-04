@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
     'content-type-and-mime-type',
     'server-sent-events',
     'content-and-accept-encoding',
+    'binary-data-in-javascript',
     'web-rtc',
     'http-caching-1',
     'http-caching-2',
