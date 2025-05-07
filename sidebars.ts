@@ -55,6 +55,7 @@ const sidebars: SidebarsConfig = {
     'evolution-of-http',
     'geojson',
     'mqtt',
+    // 'nagle\'s algorithm',
     'end',
     // {
     //   type: 'category',
