@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
     // 'transfer-encoding',
     'content-and-accept-encoding',
     'binary-data-in-javascript',
+    'sec-fetch',
     'web-rtc',
     'http-caching-1',
     'http-caching-2',
