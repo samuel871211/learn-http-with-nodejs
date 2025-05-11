@@ -380,6 +380,10 @@ httpServer.on('request', function requestListener (req, res) {
 
 ![no-sniff](./../static/img/no-sniff.jpg)
 
+<!-- ### 搭配 MIME sniffing 造成的資安漏洞 -->
+
+<!-- https://claude.ai/chat/6d10d7e8-63d1-4e83-a042-18f47b11f229 -->
+
 ### 亂碼是怎麼產生的
 
 可參考這部影片，講解的非常清楚呦！
