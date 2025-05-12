@@ -391,7 +391,11 @@ httpServer.on('request', function requestListener (req, res) {
 - Server 沒有設置 `Content-Type`，或是 Server 有設置，但瀏覽器 MIME sniffing 的機制蓋過 `Content-Type`
 - 上傳的文件可以被其他用戶訪問，且未做額外的安全控制
 
-攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
+<b style={{ color: "red" }}>
+  以下攻擊手法，使用 Chrome v136 瀏覽器，不同瀏覽器會有不同的 MIME sniffing 機制
+</b>
+
+#### 攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
 
 NodeJS HTTP 範例
 ```ts
@@ -403,10 +407,10 @@ httpServer.on('request', function requestListener (req, res) {
 });
 ```
 
-瀏覽器（Chrome v136 為例）打開，就會執行程式碼
+使用瀏覽器打開該頁面，就會執行程式碼
 ![mime-sniffing-png-as-script](../static/img/mime-sniffing-png-as-script.jpg)
 
-攻擊手法 2：繞過 CSP 限制
+#### 攻擊手法 2：繞過 CSP 限制
 
 - 攻擊者已經在某網站找到 XSS 漏洞（假設：可以在聊天室插入 `<script>`）
 - 但該網站的 `Content-Security-Policy: script-src: self`
