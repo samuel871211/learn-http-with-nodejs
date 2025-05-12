@@ -380,9 +380,41 @@ httpServer.on('request', function requestListener (req, res) {
 
 ![no-sniff](./../static/img/no-sniff.jpg)
 
-<!-- ### 搭配 MIME sniffing 造成的資安漏洞 -->
+### 搭配 MIME sniffing 的資安漏洞
 
-<!-- https://claude.ai/chat/6d10d7e8-63d1-4e83-a042-18f47b11f229 -->
+先決條件:
+
+- Server 允許使用者上傳文件
+- Server 針對上傳文件的驗證不夠嚴謹（例如：只有判斷副檔名跟 Magic Number，或是根本沒驗證）
+- Server 沒有把上傳的文件做重新編碼
+- Server 沒有設置 `X-Content-Type-Options: nosniff` 的 Response Header
+- Server 沒有設置 `Content-Type`，或是 Server 有設置，但瀏覽器 MIME sniffing 的機制蓋過 `Content-Type`
+- 上傳的文件可以被其他用戶訪問，且未做額外的安全控制
+
+攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
+
+NodeJS HTTP 範例
+```ts
+import httpServer from "../httpServer";
+
+httpServer.on('request', function requestListener (req, res) {
+  // Server 沒有設置 `Content-Type`，瀏覽器的 MIME sniffing 機制認定這是 `text/javascript`
+  if (req.url === "/script.png") return res.end('<script>alert("XSS")</script>');
+});
+```
+
+瀏覽器（Chrome v136 為例）打開，就會執行程式碼
+![mime-sniffing-png-as-script](../static/img/mime-sniffing-png-as-script.jpg)
+
+攻擊手法 2：繞過 CSP 限制
+
+- 攻擊者已經在某網站找到 XSS 漏洞（假設：可以在聊天室插入 `<script>`）
+- 但該網站的 `Content-Security-Policy: script-src: self`
+- 攻擊者先上傳一個 html，內容是 `alert("XSS")`
+- 範例：https://learn-http-with-nodejs.web.app/img/mime-sniffing-xss-in-script-src.html
+- 這時候就可以在聊天室插入 `<script src="https://learn-http-with-nodejs.web.app/img/mime-sniffing-xss-in-script-src.html"></script>`
+- 其他用戶進入聊天室以後就會執行程式碼
+- 透過 `<script>` 引入，雖然 `Content-Type: text/html`，但還是會被瀏覽器 MIME sniffing 成 `text/javascript`
 
 ### 亂碼是怎麼產生的
 
@@ -397,3 +429,4 @@ https://youtu.be/zSstXi-j7Qc?si=iHu3ebTiF9YtaZmD
 - https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Configuring_server_MIME_types
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Disposition
 - https://gist.github.com/leommoore/f9e57ba2aa4bf197ebc5
+- https://aszx87410.github.io/beyond-xss/ch5/mime-sniffing/
