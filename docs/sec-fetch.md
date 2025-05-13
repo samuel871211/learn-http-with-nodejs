@@ -78,13 +78,14 @@ where (and how) the fetched data will be used
 2. document => 載入 HTML
 3. iframe => 載入 iframe
 
+<!-- todo-yusheng -->
+<!-- ### 如何防範資安漏洞 -->
+
 ### 參考資料
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Dest
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Mode
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Site
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-User
 - https://developer.mozilla.org/en-US/docs/Glossary/Fetch_metadata_request_header
-
-<!-- 還沒看完，這是重點，要怎麼防範資安漏洞 -->
 - https://web.dev/articles/fetch-metadata
 - https://developer.mozilla.org/en-US/docs/Web/API/Request/destination

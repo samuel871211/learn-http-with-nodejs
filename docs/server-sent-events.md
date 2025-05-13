@@ -327,7 +327,7 @@ if (req.url === "/multiLineDataSSE") {
 
 ![sse-multi-line-data](../static/img/sse-multi-line-data.jpg)
 
-### 直接用 fetch API 去戳 SSE Endpoint 會發生什麼事
+### 使用 fetch API 去戳 SSE Endpoint 會發生什麼事
 
 在瀏覽器的 F12 > Console 輸入以下程式碼
 ```js
@@ -340,11 +340,16 @@ fetch("http://localhost:5000/sse")
 
 ![sse-with-fetch](../static/img/sse-with-fetch.jpg)
 
+<!-- todo-yusheng -->
+<!-- ### 使用 fetch API 搭配 ReadableStream 去戳 SSE Endpoint -->
+
+<!-- todo-yusheng -->
+<!-- ### 搭配 `Last-Event-ID` 實現掉包 retry 機制 -->
+<!-- https://html.spec.whatwg.org/multipage/server-sent-events.html#the-last-event-id-header -->
+
 ### 結尾
 
 本篇 SSE 帶大家實作了各種情境，並且也解析了 SSE 的實際應用（AI 問答），希望大家收穫滿滿！
-
-<!-- todo-yusheng 研究 res.write 跟 res.end 差在哪 -->
 
 ### 參考資料
 
@@ -352,4 +357,3 @@ fetch("http://localhost:5000/sse")
 - https://developer.mozilla.org/en-US/docs/Web/API/EventSource
 - https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 - https://nodejs.org/dist/latest-v22.x/docs/api/stream.html
-- https://claude.ai/
