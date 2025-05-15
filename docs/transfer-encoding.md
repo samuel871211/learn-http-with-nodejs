@@ -117,7 +117,7 @@ res.socket?.write(`${Buffer.byteLength(firstline).toString(16)}\r\n${firstline}`
 
 ![err-invalid-chunked-encoding](../static/img/err-invalid-chunked-encoding.jpg)
 
-瀏覽器就會噴 `ERR_INVALID_CHUNKED_ENCODING` 的錯誤
+瀏覽器就會噴 `ERR_INVALID_CHUNKED_ENCODING` 的錯誤，代表瀏覽器底層會去解析這個資料，整理完才會顯示給使用者
 
 ### Transfer-Encoding: chunked + Content-Length
 
@@ -217,7 +217,7 @@ When --raw is used, it disables all internal HTTP decoding of content or transfe
 
 ### Transfer-Encoding: chunked 搭配 Content-Type: application/json
 
-chunked 的資料除了 `text/plain`，也可以是其他類型的，我們使用 `application/json` 來當範例
+chunked 的資料除了 `text/plain` 純文字，也可以是其他類型的，我們使用 `application/json` 來當範例
 
 ```ts
 // chunked with application/json
@@ -237,7 +237,7 @@ if (req.url === "/case4") {
 }
 ```
 
-用瀏覽器打開 http://localhost:5000/case4
+用瀏覽器打開 http://localhost:5000/case4 ，可以看到正確解析成 json
 
 ![transfer-encoding-with-json](../static/img/transfer-encoding-with-json.jpg)
 
@@ -256,7 +256,7 @@ if (req.url === "/case4") {
 - 28 = 十進位的 40，等於 `6","age":18,"email":"example@gmail.com"}` 的 byte length
 - 結尾也符合 `0\r\n\r\n`
 
-###
+### ReadableStream，讓你分塊讀取 Response Body
 
 當資料量很大時，雖然資料是分塊傳輸，但瀏覽器會等到所有資料都收到，才顯示給前端，在使用者體驗上就比較差
 
@@ -279,18 +279,81 @@ if (req.url === "/case5") {
 }
 ```
 
+用瀏覽器打開 http://localhost:5000/case5 ，會發現要等 5 秒才會看到結果
+
+![transfer-encoding-with-slow-data](../static/img/transfer-encoding-with-slow-data.jpg)
+
+使用瀏覽器原生的 `fetch` 時，大家平常都是這樣寫
+
+```js
+fetch("URL").then(response => response.json()).then(json => console.log(json));
+```
+
+若仔細研究 [response](https://developer.mozilla.org/en-US/docs/Web/API/Response) 物件，會發現 [response.body](https://developer.mozilla.org/en-US/docs/Web/API/Response/body) 是 [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)
+
+我們可以利用 `ReadableStream` 來達成分塊讀取 Response Body 的功能
+
+![transfer-encoding-with-fetch](../static/img/transfer-encoding-with-fetch.jpg)
+
+### Transfer-Encoding: chunked + Connection: closed
+
+如果設定 `Connection: closed` 的話，還可以正常接收 chunk 嗎？
+
+```ts
+// chunked with connection: close
+if (req.url === "/case6") {
+    // 先傳送 headers
+    res.setHeaders(new Headers({
+        Connection: "closed",
+        "Content-Type": "text/plain",
+        "Transfer-Encoding": "chunked"
+    }));
+    res.flushHeaders();
+
+    // 過 N 秒再回傳 body
+    setTimeout(() => res.end("hello world"), 3000);
+    return;
+}
+```
+
+用瀏覽器打開 http://localhost:5000/case6 ，還是有正常收到資料
+
+![transfer-encoding-with-connection-closed](../static/img/transfer-encoding-with-connection-closed.jpg)
+
+因為 `Connection: closed` 指的是在這次 HTTP 來回的傳輸完畢之後，才關閉 TCP Connection，並不是 Response Header 傳輸完畢之後就直接關閉了，這兩者之間是有差異的．
+
 ### 跟 Server Sent Events 的差別
 
-<!-- ### request smuggling -->
+當初在研究 `Transfer-Encoding: chunked` 的時候，我一直覺得這跟 [SSE](../docs/server-sent-events.md) 的概念很像，但兩者的應用情境略有不同，差異如下：
 
-<!-- ### response splitting -->
+|  | Transfer-Encoding: chunked | Server Sent Events |
+| :----: | :----: | :----: |
+| Content-Type | 任何 | text/event-stream |
+| 主要用途 | 任意長度的資料傳輸（不限型別） | 向瀏覽器單向推播文字資料（通常是事件/訊息） |
+| 使用場景 | 文件下載、API 回應分段等 | 即時通知、即時資料更新（像股價、聊天訊息）|
+| 瀏覽器 EventSource 支援 | ❌ | ✅ |
+| retry | ❌ | ✅ |
+| eventType | ❌ | ✅ |
+
+### Transfer-Encoding vs Content-Encoding
+
+實務上，瀏覽器到 Server 中間可能會經過很多節點，例如 Client `<=>` Proxy Server `<=>` CDN `<=>` Actual Server
+
+
+`Transfer-Encoding` 是指相鄰兩個節點之間的傳輸方式，並不代表最終到 Client 或 Actual Server 需要用此方式傳輸
+
+而 `Content-Encoding` 則是 [End-to-end headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers#end-to-end_headers)，代表這個 header 一定要傳到最後的接收者
+
+|  | Transfer-Encoding | Content-Encoding |
+| :----: | :----: | :----: |
+| 可否與 Content-Length 並用 | 當使用 chunked 時，❌ | ✅ |
+| 是否為 End-to-end headers | ❌ | ✅ |
 
 <!-- todo-yusheng -->
-<!-- https://chatgpt.com/c/6822ac29-948c-8012-bffc-fcab2b9264d3 -->
-<!-- https://claude.ai/chat/9ec60e67-a1eb-43af-9460-b9fd697931d4 -->
-<!-- https://chatgpt.com/c/6823085c-ff78-8012-ad51-5900e35d5516 -->
+<!-- ### request smuggling -->
 
-### ReadableStream
+<!-- todo-yusheng -->
+<!-- ### response splitting -->
 
 ### 參考資料
 
@@ -298,3 +361,7 @@ if (req.url === "/case5") {
 - https://datatracker.ietf.org/doc/html/rfc9112#name-chunked-transfer-coding
 - https://httpwg.org/specs/rfc9112.html#field.transfer-encoding
 - https://everything.curl.dev/usingcurl/downloads/raw.html
+- https://developer.mozilla.org/en-US/docs/Web/API/Response/body
+- https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream
+- https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader
+- https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader/read
