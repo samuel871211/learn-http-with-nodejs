@@ -13,10 +13,10 @@ description: Sec-Fetch
   4. Sec-Fetch-Dest
 - 承上，這 4 個 Headers 無法透過 JavaScript 去修改，這是瀏覽器預設就會帶上的
 
-
 ### Sec-Fetch-Site
 
 根據[MDN 官方文件](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Site) 的描述
+
 ```
 indicates the relationship between a request initiator's origin and the origin of the requested resource
 ```
@@ -24,12 +24,19 @@ indicates the relationship between a request initiator's origin and the origin o
 總共有四種情況
 
 1. cross-site
+
 - 跨域，例如 `a.example.com` 載入 `other.domain.com` 的資源
+
 2. same-origin
+
 - 同源，例如 `a.example.com` 載入 `a.example.com` 的資源
+
 3. same-site
+
 - subdomain，例如 `a.example.com` 載入 `b.example.com` 的資源
+
 4. none
+
 - 直接從瀏覽器網址列輸入網址
 - 從瀏覽器書籤進入網址
 
@@ -40,16 +47,24 @@ indicates the relationship between a request initiator's origin and the origin o
 總共有 5 種情況，前面 4 種都是 `fetch` 的第二個參數 `options.mode`
 
 1. cors
+
 - `fetch("URL")` 不指定第二個參數 `options.mode` 的情況，預設就是 `cors`
+
 2. navigate
+
 - 直接從瀏覽器網址列輸入網址
 - 從瀏覽器書籤進入網址
 - `<a>` 或 `location.assign` 等等網址轉導
+
 3. no-cors
+
 - 使用 `<img>` 載入圖片，因為圖片只是要顯示在畫面上，無法透過 JavaScript 讀取圖片的數據。
 - `fetch("URL", { mode: "no-cors" })`
+
 4. same-origin
+
 - 在 `a.example.com` 的 F12 > Console 輸入 `fetch("a.example.com", { mode: "same-origin" })`
+
 5. websocket
 
 ### Sec-Fetch-User
@@ -59,21 +74,25 @@ indicates the relationship between a request initiator's origin and the origin o
 總共有 2 種情況
 
 1. `Sec-Fetch-User: ?1`
+
 - 使用者載入網頁
 - 使用者點擊 `<a>`
 
 2. 瀏覽器會 Omit 這個 Header
+
 - 網頁載入的 `<img>`, `<script>`
 - F12 > Console 輸入 `fetch("URL")`
 
 ### Sec-Fetch-Dest
 
 根據[MDN 官方文件](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Dest) 的描述
+
 ```
 where (and how) the fetched data will be used
 ```
 
 有很多種情況，不過大致上就是，要載入哪種資源
+
 1. image => 載入圖片
 2. document => 載入 HTML
 3. iframe => 載入 iframe
@@ -82,6 +101,7 @@ where (and how) the fetched data will be used
 <!-- ### 如何防範資安漏洞 -->
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Dest
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Mode
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Site

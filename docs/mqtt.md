@@ -34,7 +34,7 @@ MQTT 的應用場景通常是在 IoT 設備，在頻寬/資源有限的情況下
 
 ## Publish / Subscribe 模式
 
-Publisher（發佈者） 會將 Topic（主題）傳給 Broker (中間人)，Broker 再將消息傳遞給各個 Subscriber (訂閱者)。這種概念讓我想到 Redis 的 PubSub，同時這種概念我覺得在很多領域也都有類似的應用場景。 
+Publisher（發佈者） 會將 Topic（主題）傳給 Broker (中間人)，Broker 再將消息傳遞給各個 Subscriber (訂閱者)。這種概念讓我想到 Redis 的 PubSub，同時這種概念我覺得在很多領域也都有類似的應用場景。
 
 ## Quality Of Service
 

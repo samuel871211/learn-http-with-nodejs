@@ -35,7 +35,7 @@ https://github.com/nodejs/node/blob/main/lib/_http_server.js#L478
 ```js
 const keepAliveTimeout = options.keepAliveTimeout;
 if (keepAliveTimeout !== undefined) {
-  validateInteger(keepAliveTimeout, 'keepAliveTimeout', 0);
+  validateInteger(keepAliveTimeout, "keepAliveTimeout", 0);
   this.keepAliveTimeout = keepAliveTimeout;
 } else {
   this.keepAliveTimeout = 5_000; // 5 seconds;
@@ -78,7 +78,7 @@ const HTTP_SERVER_KEEP_ALIVE_TIMEOUT_BUFFER = 1000;
 
 https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/net.d.ts#L183
 
-```js
+````js
 /**
  * Sets the socket to timeout after `timeout` milliseconds of inactivity on
  * the socket. By default `net.Socket` do not have a timeout.
@@ -101,7 +101,7 @@ https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/net.d.
  * @return The socket itself.
  */
 setTimeout(timeout: number, callback?: () => void): this;
-```
+````
 
 其實就跟你平常所認知的 `setTimeout` 是一樣的東西，那具體來說 `socket.on('timeout', callback)` 到底執行了什麼呢？我們接著往下追
 
@@ -146,6 +146,7 @@ httpServer.keepAliveTimeout = 1000;
 ### max
 
 如果我們仔細查看 MDN 文件，可以看到 keepAlive 的 value 其實可以設定 timeout 跟 max
+
 ```
 Keep-Alive: timeout=5, max=100
 ```
@@ -173,9 +174,10 @@ httpServer.maxRequestsPerSocket = 1;
 nginx:
 
 https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive_requests
+
 ```
 Syntax:	keepalive_requests number;
-Default:	
+Default:
 keepalive_requests 1000;
 Context:	upstream
 This directive appeared in version 1.15.3.
@@ -191,6 +193,7 @@ Prior to version 1.19.10, the default value was 100.
 apache:
 
 https://httpd.apache.org/docs/2.4/mod/core.html#maxkeepaliverequests
+
 ```
 MaxKeepAliveRequests Directive
 Description:	Number of requests allowed on a persistent connection
@@ -210,13 +213,14 @@ MaxKeepAliveRequests 500
 
 https://tomcat.apache.org/tomcat-5.5-doc/config/http.html
 ```
-maxKeepAliveRequests	
+maxKeepAliveRequests
 The maximum number of HTTP requests which can be pipelined until the connection is closed by the server. Setting this attribute to 1 will disable HTTP/1.0 keep-alive, as well as HTTP/1.1 keep-alive and pipelining. Setting this to -1 will allow an unlimited amount of pipelined or keep-alive HTTP requests. If not specified, this attribute is set to 100.
 ``` -->
 
 實務上來說，瀏覽器跟 application server（商業邏輯的實現通常會在這一層），中間至少都會墊一層 web server，讓開發者可以更專注在商業邏輯的實現，而不需要關注像是像是 `maxKeepAliveRequests` 跟 `keepAliveTimeout` 這種很細節的東西，但回頭來看，了解 http 的原理跟規範，再來看看 web server 怎麼實作這些，就可以更了解為何需要拆分 web server 跟 application server 了
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
 - https://datatracker.ietf.org/doc/html/rfc7230#appendix-A.1.2

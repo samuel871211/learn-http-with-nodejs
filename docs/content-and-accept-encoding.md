@@ -42,7 +42,7 @@ NodeJS 有原生的模組 `zlib`，專門處理壓縮跟解壓縮的邏輯，常
 ```ts
 import { readFileSync } from "node:fs";
 import httpServer from "../httpServer";
-import { gzipSync, brotliCompressSync, deflateSync } from 'node:zlib';
+import { gzipSync, brotliCompressSync, deflateSync } from "node:zlib";
 import { join } from "node:path";
 
 // 使用 react 18.3.1 當作要 serve 的靜態資源，並且預先壓縮
@@ -53,17 +53,17 @@ const deflateSelfHostReactJs = deflateSync(selfHostReactJs);
 const encodedSelfHostReactJsMap = {
   gzip: gzipSelfHostReactJs,
   deflate: deflateSelfHostReactJs,
-  br: brotliSelfHostReactJs
-}
+  br: brotliSelfHostReactJs,
+};
 type ServerAcceptedEncoding = keyof typeof encodedSelfHostReactJsMap;
 type EncodingPreference = { encoding: string; q: number };
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   if (req.url === "/favicon.ico") return faviconListener(req, res);
   const acceptEncoding = req.headers["accept-encoding"];
   const encodingPreferenceList: EncodingPreference[] = String(acceptEncoding)
     .split(",")
-    .map(part => {
+    .map((part) => {
       const [encoding, qPart] = part.trim().split(";");
       const q = qPart ? parseFloat(qPart.split("=")[1]) : 1.0;
       return { encoding: encoding.trim(), q };
@@ -73,9 +73,10 @@ httpServer.on('request', function requestListener (req, res) {
 
   // 暫不處理 identity 或是 * 或是 q=0 這些特殊情境
   for (const { encoding } of encodingPreferenceList) {
-    const encodedSelfHostReactJs = encodedSelfHostReactJsMap[encoding as ServerAcceptedEncoding];
+    const encodedSelfHostReactJs =
+      encodedSelfHostReactJsMap[encoding as ServerAcceptedEncoding];
     if (encodedSelfHostReactJs) {
-      res.setHeader('Content-Encoding', encoding);
+      res.setHeader("Content-Encoding", encoding);
       res.end(encodedSelfHostReactJs);
       return;
     }
@@ -105,8 +106,8 @@ httpServer.on('request', function requestListener (req, res) {
 我們改寫一下 NodeJS 程式碼（只列出異動部分）
 
 ```ts
-httpServer.on('request', function requestListener (req, res) {
-  res.setHeader('Content-Encoding', 'br');
+httpServer.on("request", function requestListener(req, res) {
+  res.setHeader("Content-Encoding", "br");
   return res.end(selfHostReactJs);
 });
 ```
@@ -122,15 +123,19 @@ httpServer.on('request', function requestListener (req, res) {
 ```js
 async function fetchAndCompressToGzip() {
   try {
-    const response = await fetch("https://unpkg.com/react@18.3.1/umd/react.development.js");
+    const response = await fetch(
+      "https://unpkg.com/react@18.3.1/umd/react.development.js",
+    );
     const originalData = await response.arrayBuffer();
     const readableStream = new ReadableStream({
       start(controller) {
         controller.enqueue(new Uint8Array(originalData));
         controller.close();
-      }
+      },
     });
-    const compressedStream = readableStream.pipeThrough(new CompressionStream('gzip'));
+    const compressedStream = readableStream.pipeThrough(
+      new CompressionStream("gzip"),
+    );
     const reader = compressedStream.getReader();
     const chunks = [];
     while (true) {
@@ -138,25 +143,27 @@ async function fetchAndCompressToGzip() {
       if (done) break;
       chunks.push(value);
     }
-    const gzippedBlob = new Blob(chunks, { type: 'application/javascript; charset=utf-8' });
+    const gzippedBlob = new Blob(chunks, {
+      type: "application/javascript; charset=utf-8",
+    });
     return gzippedBlob;
   } catch (error) {
-    console.error('壓縮過程出錯:', error);
+    console.error("壓縮過程出錯:", error);
     throw error;
   }
 }
 
-async function sendGzippedBlobToServer (body) {
-  const response = await fetch('http://localhost:5000/postGzipped', {
+async function sendGzippedBlobToServer(body) {
+  const response = await fetch("http://localhost:5000/postGzipped", {
     method: "post",
     headers: {
       "Content-Encoding": "gzip",
     },
-    body
-  }).then(res => res.text())
+    body,
+  }).then((res) => res.text());
 }
 
-async function main () {
+async function main() {
   const gzippedBlob = await fetchAndCompressToGzip();
   const text = await sendGzippedBlobToServer(gzippedBlob);
   console.log(text);
@@ -168,39 +175,39 @@ main();
 稍微調整一下 NodeJS 的程式碼，處理 `/postGzipped` 的路由（僅列出異動部分），把 client 傳送的 gzipped react 原始碼解壓縮，並且回傳。
 
 ```ts
-  if (req.url === "/") {
-    // ...無異動
+if (req.url === "/") {
+  // ...無異動
+} else if (req.url === "/postGzipped" && req.method?.toLowerCase() === "post") {
+  // 檢查 contentEncoding 是否為 Server 可處理的類型
+  const contentEncoding = req.headers["content-encoding"];
+  if (contentEncoding !== "gzip") {
+    res.statusCode = 415;
+    res.setHeader("Accept-Encoding", "gzip");
+    res.end();
+    return;
   }
-  else if (req.url === "/postGzipped" && req.method?.toLowerCase() === "post") {
-    // 檢查 contentEncoding 是否為 Server 可處理的類型
-    const contentEncoding = req.headers['content-encoding'];
-    if (contentEncoding !== 'gzip') {
-      res.statusCode = 415;
-      res.setHeader("Accept-Encoding", "gzip");
-      res.end();
-      return;
-    }
-    // 檢查 contentType 是否有值
-    const contentType = req.headers['content-type'];
-    if (!contentType) {
-      res.statusCode = 400;
-      res.setHeader("Content-Type", "text/plain");
-      res.end("Invalid Content Type");
-      return;
-    }
+  // 檢查 contentType 是否有值
+  const contentType = req.headers["content-type"];
+  if (!contentType) {
+    res.statusCode = 400;
+    res.setHeader("Content-Type", "text/plain");
+    res.end("Invalid Content Type");
+    return;
+  }
 
-    // 開始讀取 req.body
-    const chunks: Buffer[] = [];
-    req.on('data', (chunk: Buffer) => { chunks.push(chunk) });
-    req.on('end', () => {
-      const decompressedBuffer = gunzipSync(Buffer.concat(chunks));
-      const decompressedString = decompressedBuffer.toString('utf-8');
-      // 非最佳實踐，需先確認為合法的 contentType
-      res.setHeader("Content-Type", contentType);
-      res.end(decompressedString);
-    });
-  }
-  else return notFoundListener(req, res);
+  // 開始讀取 req.body
+  const chunks: Buffer[] = [];
+  req.on("data", (chunk: Buffer) => {
+    chunks.push(chunk);
+  });
+  req.on("end", () => {
+    const decompressedBuffer = gunzipSync(Buffer.concat(chunks));
+    const decompressedString = decompressedBuffer.toString("utf-8");
+    // 非最佳實踐，需先確認為合法的 contentType
+    res.setHeader("Content-Type", contentType);
+    res.end(decompressedString);
+  });
+} else return notFoundListener(req, res);
 ```
 
 打開瀏覽器 F12 > Console，執行上面的 `main()`，並且切到 Network 觀察
@@ -223,14 +230,14 @@ Response body 是解壓縮後的資料
 上面的 `/postGzipped` 路由，其實已經有正確處理 415 Unsupported Media Type 的情況，我們只需要稍微改寫 client 端的程式碼，把 `Content-Encoding` 拔掉
 
 ```js
-async function sendGzippedBlobToServer (body) {
-  const response = await fetch('http://localhost:5000/postGzipped', {
+async function sendGzippedBlobToServer(body) {
+  const response = await fetch("http://localhost:5000/postGzipped", {
     method: "post",
     headers: {
       // "Content-Encoding": "gzip",
     },
-    body
-  }).then(res => res.text())
+    body,
+  }).then((res) => res.text());
 }
 ```
 
@@ -282,6 +289,7 @@ async function fetchAndCompressToGzip() {
 2. [doc[node]: add "accept-encoding" to `interface IncomingHttpHeaders`](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/72673)
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Compression
 - https://developer.mozilla.org/en-US/docs/Glossary/Lossless_compression
 - https://developer.mozilla.org/en-US/docs/Glossary/Lossy_compression

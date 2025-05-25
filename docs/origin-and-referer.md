@@ -8,10 +8,10 @@ description: Origin And Referer
 為了等等方便測試，我們一樣先建立一個簡單的 NodeJS HTTP Server，所有 path 跟 method 都統一回傳 `ok` 字串就好
 
 ```js
-import { createServer } from 'http';
+import { createServer } from "http";
 const httpServer = createServer().listen(5000);
-httpServer.on('request', (req, res) => {
-    res.end("ok");
+httpServer.on("request", (req, res) => {
+  res.end("ok");
 });
 ```
 
@@ -76,7 +76,9 @@ fetch("https://www.google.com", { mode: "no-cors", method: "POST" });
 講到這邊，腦筋動很快的小夥伴可能會想到，origin request header 是可以透過 javascript 去改變的嗎？我們試試看
 
 ```js
-fetch("https://www.google.com", { headers: { Origin: "https://www.google.com" } });
+fetch("https://www.google.com", {
+  headers: { Origin: "https://www.google.com" },
+});
 ```
 
 可惜，最終送出去的 origin 還是沒有改變，我們看看 Fetch API 的官方文件是怎麼說的
@@ -105,8 +107,8 @@ A header (name, value) is forbidden request-header if these steps return true:
 ```html
 <!DOCTYPE html>
 <html>
-    <head></head>
-    <body></body>
+  <head></head>
+  <body></body>
 </html>
 ```
 
@@ -193,9 +195,15 @@ This prevents leaks of private data that may be accessible from other parts of t
 
 ```js
 // 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "no-referrer", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "no-referrer",
+  mode: "no-cors",
+});
 // 預期不會送 referer
-fetch('https://www.google.com', { referrerPolicy: "no-referrer", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "no-referrer",
+  mode: "no-cors",
+});
 ```
 
 ### 2. `no-referrer-when-downgrade`
@@ -206,9 +214,15 @@ downgrade（https > http 或 https > file） 情境就不送 referrer，反之�
 
 ```js
 // 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "no-referrer-when-downgrade", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "no-referrer-when-downgrade",
+  mode: "no-cors",
+});
 // 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "no-referrer-when-downgrade", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "no-referrer-when-downgrade",
+  mode: "no-cors",
+});
 ```
 
 ### 3. `origin`
@@ -219,18 +233,18 @@ fetch('https://www.google.com', { referrerPolicy: "no-referrer-when-downgrade", 
 
 ```js
 // 預期會送 referer: http://localhost:5000/
-fetch('http://localhost:5000', { referrerPolicy: "origin", mode: "no-cors" });
+fetch("http://localhost:5000", { referrerPolicy: "origin", mode: "no-cors" });
 // 預期會送 referer: http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "origin", mode: "no-cors" });
+fetch("https://www.google.com", { referrerPolicy: "origin", mode: "no-cors" });
 ```
 
 我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期會送 referer: https://www.google.com/
-fetch('http://localhost:5000', { referrerPolicy: "origin", mode: "no-cors" });
+fetch("http://localhost:5000", { referrerPolicy: "origin", mode: "no-cors" });
 // 預期會送 referer: https://www.google.com/
-fetch('https://www.google.com', { referrerPolicy: "origin", mode: "no-cors" });
+fetch("https://www.google.com", { referrerPolicy: "origin", mode: "no-cors" });
 ```
 
 ### 4. `origin-when-cross-origin`
@@ -241,18 +255,30 @@ fetch('https://www.google.com', { referrerPolicy: "origin", mode: "no-cors" });
 
 ```js
 // 同源 => 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "origin-when-cross-origin",
+  mode: "no-cors",
+});
 // 跨域 => 預期會送 referer: http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "origin-when-cross-origin",
+  mode: "no-cors",
+});
 ```
 
 我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 跨域 => 預期會送 referer: https://www.google.com/
-fetch('http://localhost:5000', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "origin-when-cross-origin",
+  mode: "no-cors",
+});
 // 同源 => 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "origin-when-cross-origin",
+  mode: "no-cors",
+});
 ```
 
 ### 5. `same-origin`
@@ -263,18 +289,30 @@ fetch('https://www.google.com', { referrerPolicy: "origin-when-cross-origin", mo
 
 ```js
 // 同源 => 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "same-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "same-origin",
+  mode: "no-cors",
+});
 // 跨域 => 預期不會送 referer
-fetch('https://www.google.com', { referrerPolicy: "same-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "same-origin",
+  mode: "no-cors",
+});
 ```
 
 我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 跨域 => 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "same-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "same-origin",
+  mode: "no-cors",
+});
 // 同源 => 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "same-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "same-origin",
+  mode: "no-cors",
+});
 ```
 
 ### 6. `strict-origin`
@@ -285,21 +323,33 @@ protocol 沒有 downgrade 的時候就送 origin，反之就不送
 
 ```js
 // protocol 沒有 downgrade => 預期會送 referer: http://localhost:5000/
-fetch('http://localhost:5000', { referrerPolicy: "strict-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "strict-origin",
+  mode: "no-cors",
+});
 // protocol 沒有 downgrade => 預期會送 referer http://localhost:5000/
-fetch('https://www.google.com', { referrerPolicy: "strict-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "strict-origin",
+  mode: "no-cors",
+});
 ```
 
 我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // protocol downgrade => 預期不會送 referer
-fetch('http://localhost:5000', { referrerPolicy: "strict-origin", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "strict-origin",
+  mode: "no-cors",
+});
 // protocol 沒有 downgrade => 預期會送 referer: https://www.google.com/
-fetch('https://www.google.com', { referrerPolicy: "strict-origin", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "strict-origin",
+  mode: "no-cors",
+});
 ```
 
-### 7. `strict-origin-when-cross-origin` 
+### 7. `strict-origin-when-cross-origin`
 
 這是瀏覽器的預設值，上面有講過了～
 
@@ -311,27 +361,45 @@ fetch('https://www.google.com', { referrerPolicy: "strict-origin", mode: "no-cor
 
 ```js
 // 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 // 預期會送 referer: http://localhost:5000/test?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 ```
 
 我們再試試看在 https://www.google.com/?a=1&b=2 這個頁面的 F12 > Console 輸入
 
 ```js
 // 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 // 預期會送 referer: https://www.google.com/?a=1&b=2
-fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 ```
 
 我們試著使用剛剛建立的 `index.html`，直接用瀏覽器打開，應該會看到網址列顯示 `file:///Users/xxx/path-to/index.html`，打開 F12 > Console 輸入
 
 ```js
 // 預期會送 referer: file:///Users/xxx/path-to/index.html
-fetch('http://localhost:5000', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("http://localhost:5000", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 // 預期會送 referer: file:///Users/xxx/path-to/index.html
-fetch('https://www.google.com', { referrerPolicy: "unsafe-url", mode: "no-cors" });
+fetch("https://www.google.com", {
+  referrerPolicy: "unsafe-url",
+  mode: "no-cors",
+});
 ```
 
 實際打開 F12 > Network，發現完全沒有送 referer，這是怎麼回事？
@@ -357,6 +425,7 @@ If document’s origin is an opaque origin, return no referrer.
 todo -->
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy

@@ -15,7 +15,6 @@ description: Content-Type And MIME Type
 
 Content-Type 可以做為 HTTP Request Header 跟 HTTP Response Header，其實它指的就是 body 區塊的內容類型
 
-
 ### Web Develop 比較常見的 MIME Type
 
 Web Develop 比較常見的 MIME Type 有以下
@@ -41,7 +40,12 @@ Web Develop 比較常見的 MIME Type 有以下
   <head></head>
   <body>
     <main>
-      <form name="updateUser" method="post" action="/updateUser" enctype="multipart/form-data">
+      <form
+        name="updateUser"
+        method="post"
+        action="/updateUser"
+        enctype="multipart/form-data"
+      >
         <div>
           <label for="username">username</label>
           <input id="username" name="username" />
@@ -72,9 +76,9 @@ import httpServer from "../httpServer";
 import { faviconListener } from "../listeners/faviconListener";
 import { notFoundListener } from "../listeners/notFoundlistener";
 
-const indexHTML = readFileSync(join(__dirname, 'index.html'));
+const indexHTML = readFileSync(join(__dirname, "index.html"));
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   const method = String(req.method).toLowerCase();
 
   if (req.url === "/") {
@@ -84,8 +88,8 @@ httpServer.on('request', function requestListener (req, res) {
   }
   if (req.url === "/updateUser" && method === "post") {
     const chunks: Buffer[] = [];
-    req.on('data', (chunk) => (chunks.push(chunk)));
-    req.once('end', () => {
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.once("end", () => {
       const buffer = Buffer.concat(chunks);
       // binary 圖片轉成 utf8 字串會造成效能低落
       // const utf8String = buffer.toString('utf8');
@@ -180,7 +184,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryC8h6BB9h8kXL7C
 ```ts
 import httpServer from "../httpServer";
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   res.setHeader("Content-Disposition", "attachment; filename=hello world.txt");
   res.end("hello world");
 });
@@ -194,8 +198,8 @@ httpServer.on('request', function requestListener (req, res) {
 import httpServer from "../httpServer";
 import { readFileSync } from "fs";
 import { join } from "path";
-const image = readFileSync(join(__dirname, 'image.jpg'));
-httpServer.on('request', function requestListener (req, res) {
+const image = readFileSync(join(__dirname, "image.jpg"));
+httpServer.on("request", function requestListener(req, res) {
   res.setHeader("Content-Type", "image/jpeg");
   res.setHeader("Content-Disposition", "attachment; filename=image.jpg");
   res.end(image);
@@ -218,7 +222,12 @@ httpServer.on('request', function requestListener (req, res) {
   <head></head>
   <body>
     <main>
-      <form name="updateUser" method="post" action="/updateUser" enctype="application/x-www-form-urlencoded">
+      <form
+        name="updateUser"
+        method="post"
+        action="/updateUser"
+        enctype="application/x-www-form-urlencoded"
+      >
         <div>
           <label for="username">username</label>
           <input id="username" name="username" />
@@ -249,11 +258,11 @@ import httpServer from "../httpServer";
 import { faviconListener } from "../listeners/faviconListener";
 import { notFoundListener } from "../listeners/notFoundlistener";
 
-const indexHTML = readFileSync(join(__dirname, 'index.html'));
+const indexHTML = readFileSync(join(__dirname, "index.html"));
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   const method = String(req.method).toLowerCase();
-  
+
   if (req.url === "/") {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(indexHTML);
@@ -261,8 +270,8 @@ httpServer.on('request', function requestListener (req, res) {
   }
   if (req.url === "/updateUser" && method === "post") {
     const chunks: Buffer[] = [];
-    req.on('data', (chunk) => (chunks.push(chunk)));
-    req.once('end', () => {
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.once("end", () => {
       const buffer = Buffer.concat(chunks);
       res.setHeader("Content-Type", "text/plain");
       res.end(buffer);
@@ -292,7 +301,10 @@ username=123&age=123&url=https%3A%2F%2Ftranslate.google.com.tw%2F%3Fhl%3Dzh-TW%2
 url 後面的字串，就是 urlencoded 的結果，我們可以使用以下程式碼驗證
 
 ```ts
-encodeURIComponent("https://translate.google.com.tw/?hl=zh-TW&sl=auto&tl=zh-TW&op=translate") === "https%3A%2F%2Ftranslate.google.com.tw%2F%3Fhl%3Dzh-TW%26sl%3Dauto%26tl%3Dzh-TW%26op%3Dtranslate" // true
+encodeURIComponent(
+  "https://translate.google.com.tw/?hl=zh-TW&sl=auto&tl=zh-TW&op=translate",
+) ===
+  "https%3A%2F%2Ftranslate.google.com.tw%2F%3Fhl%3Dzh-TW%26sl%3Dauto%26tl%3Dzh-TW%26op%3Dtranslate"; // true
 ```
 
 要注意 application/x-www-form-urlencoded 是不能用來上傳檔案的，所以通常是用來處理簡單的情境，比如一般的文字表單
@@ -309,8 +321,8 @@ import { faviconListener } from "../listeners/faviconListener";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-const image = readFileSync(join(__dirname, 'image.jpg'));
-httpServer.on('request', function requestListener (req, res) {
+const image = readFileSync(join(__dirname, "image.jpg"));
+httpServer.on("request", function requestListener(req, res) {
   if (req.url === "/favicon.ico") return faviconListener(req, res);
   res.setHeader("Content-Type", "text/plain");
   res.end(image);
@@ -338,7 +350,7 @@ httpServer.on('request', function requestListener (req, res) {
 import { readFileSync } from "fs";
 import { join } from "path";
 
-const image = readFileSync(join(__dirname, 'image.jpg'));
+const image = readFileSync(join(__dirname, "image.jpg"));
 console.log(image.buffer.slice(0, 4));
 ```
 
@@ -354,7 +366,7 @@ ArrayBuffer { [Uint8Contents]: <ff d8 ff e0>, byteLength: 4 }
 - 1 byte = 8 bits = 2 的 8 次方 = 可儲存最多 256 種排列組合
 - HEX = 16 進位表達方式
 - ff d8 ff e0 都是 1 個 byte 的排列組合，用 16 進位的表達方式
- 
+
 ### X-Content-Type-Options
 
 上面有提到瀏覽器的 [MIME sniffing](#mime-sniffing) 機制，但有些情況，我們希望把這個機制禁用，這時候就會需要在 Response Header 設定 `X-Content-Type-Options: nosniff`
@@ -367,8 +379,8 @@ import { faviconListener } from "../listeners/faviconListener";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-const image = readFileSync(join(__dirname, 'image.jpg'));
-httpServer.on('request', function requestListener (req, res) {
+const image = readFileSync(join(__dirname, "image.jpg"));
+httpServer.on("request", function requestListener(req, res) {
   if (req.url === "/favicon.ico") return faviconListener(req, res);
   res.setHeader("Content-Type", "text/plain; charset=");
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -392,18 +404,20 @@ httpServer.on('request', function requestListener (req, res) {
 - 上傳的文件可以被其他用戶訪問，且未做額外的安全控制
 
 <b style={{ color: "red" }}>
-  以下攻擊手法，使用 Chrome v136 瀏覽器，不同瀏覽器會有不同的 MIME sniffing 機制
+以下攻擊手法，使用 Chrome v136 瀏覽器，不同瀏覽器會有不同的 MIME sniffing 機制
 </b>
 
 #### 攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
 
 NodeJS HTTP 範例
+
 ```ts
 import httpServer from "../httpServer";
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   // Server 沒有設置 `Content-Type`，瀏覽器的 MIME sniffing 機制認定這是 `text/javascript`
-  if (req.url === "/script.png") return res.end('<script>alert("XSS")</script>');
+  if (req.url === "/script.png")
+    return res.end('<script>alert("XSS")</script>');
 });
 ```
 
@@ -427,6 +441,7 @@ httpServer.on('request', function requestListener (req, res) {
 https://youtu.be/zSstXi-j7Qc?si=iHu3ebTiF9YtaZmD
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types

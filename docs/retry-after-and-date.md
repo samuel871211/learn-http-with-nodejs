@@ -50,6 +50,7 @@ httpServer.on("request", function requestListener(req, res) {
 ```
 
 使用瀏覽器分別打開
+
 - http://localhost:5000/200
 - http://localhost:5000/429
 - http://localhost:5000/503
@@ -70,10 +71,10 @@ this.retryOpts = {
   maxTimeout: maxTimeout ?? 30 * 1000, // 30s,
   minTimeout: minTimeout ?? 500, // .5s
   maxRetries: maxRetries ?? 5,
-  methods: methods ?? ['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE', 'TRACE'],
+  methods: methods ?? ["GET", "HEAD", "OPTIONS", "PUT", "DELETE", "TRACE"],
   statusCodes: statusCodes ?? [500, 502, 503, 504, 429],
   // other options
-}
+};
 ```
 
 我們使用 undici 的 `Agent` 跟 `RetryAgent` 來實作 HTTP Client。
@@ -141,13 +142,12 @@ Retry-After: 6.030s
 如果改成去請求 `/200` 的路由，因為不在預設的 `statusCodes`，理論上就不會 retry
 
 ```ts
-httpClientWithRetry
-  .request({
-    origin: "http://localhost:5000",
-    path: "/200",
-    method: "GET",
-  })
-  // 其餘 code 不變
+httpClientWithRetry.request({
+  origin: "http://localhost:5000",
+  path: "/200",
+  method: "GET",
+});
+// 其餘 code 不變
 ```
 
 接著看看輸出
@@ -165,7 +165,7 @@ Retry-After: 14.005ms
 使用瀏覽器的 `fetch`，即便收到 `Retry-After` 的 Response Header，也不會自動 retry
 
 ```js
-fetch("http://localhost:5000/429")
+fetch("http://localhost:5000/429");
 ```
 
 我在 whatwg (Web Hypertext Application Technology Working Group)，專門維護 HTML 標準的組織，有找到一個 [issue](https://github.com/whatwg/fetch/issues/116)，在 2015 年的時候，就已經有開發者提出 `fetch` 可否支援 `Retry-After` 的請求，不過直到現在都還沒有實作
@@ -204,6 +204,7 @@ graph TD
 還好 `undici` 有實作，才讓我有東西可以參考。並且也搜到很多 `fetch` 相關的歷史，真的是收穫滿滿！
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
 - https://datatracker.ietf.org/doc/html/rfc6585

@@ -91,6 +91,7 @@ TypeError: Invalid character in header content ["Location"]
 為什麼呢？因為 NodeJS 在 `setHeader` 這邊有實作過濾，避免 CRLF Injection 的情況發生
 
 https://github.com/nodejs/node/blob/main/lib/_http_outgoing.js#L697
+
 ```js
 OutgoingMessage.prototype.setHeader = function setHeader(name, value) {
   if (this._header) {
@@ -114,7 +115,7 @@ const validateHeaderValue = hideStackFrames((name, value) => {
   }
   if (checkInvalidHeaderChar(value)) {
     debug('Header "%s" contains invalid characters', name);
-    throw new ERR_INVALID_CHAR.HideStackFramesError('header content', name);
+    throw new ERR_INVALID_CHAR.HideStackFramesError("header content", name);
   }
 });
 ```
@@ -152,6 +153,7 @@ function checkInvalidHeaderChar(val) {
 今天的內容到這裡，開頭是介紹 Anatomy of an HTTP message，但沒想到卻延伸到了 CRLF Injection XDD
 
 ### 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#anatomy_of_an_http_message
 - https://ithelp.ithome.com.tw/m/articles/10242682
 - https://ithelp.ithome.com.tw/m/articles/10353840

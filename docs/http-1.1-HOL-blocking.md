@@ -6,13 +6,15 @@ description: HTTP 1.1 HOL blocking
 今天要來讓大家實際體驗 HTTP 1.1 HOL (head-of-line) blocking，首先，用 NodeJS http module 建立一個簡易的 http server，為了方便觀察，我們將 server 設定成 2 秒後才會回覆
 
 ```js
-import { createServer } from 'http';
+import { createServer } from "http";
 const httpServer = createServer().listen(5000);
-httpServer.on('request', (req, res) => {
-  setTimeout(() => { res.end("ok") }, 2000);
+httpServer.on("request", (req, res) => {
+  setTimeout(() => {
+    res.end("ok");
+  }, 2000);
 });
-httpServer.on('connection', (req, res) => {
-  console.log('connection');
+httpServer.on("connection", (req, res) => {
+  console.log("connection");
 });
 ```
 
@@ -27,7 +29,7 @@ const responses = await Promise.all([
   fetch("http://localhost:5000"),
   fetch("http://localhost:5000"),
   fetch("http://localhost:5000"),
-  fetch("http://localhost:5000")
+  fetch("http://localhost:5000"),
 ]);
 ```
 
@@ -36,16 +38,18 @@ const responses = await Promise.all([
 1. 以下請求會同時發出去嗎?
 2. Server Log 總共會看到幾次 `console.log('connection')` 呢?
 
-***
+---
 
 防雷
 
-***
+---
 
 公布答案
+
 1. 不會，第 7 個 request 被停滯（Stalled）了
 2. 6 次
-![browerMaxConnection7](../static/img/browserMaxConnection7.jpg)
+   ![browerMaxConnection7](../static/img/browserMaxConnection7.jpg)
+
 ```
 [nodemon] starting `ts-node src/index.ts`
 connection
@@ -97,7 +101,8 @@ const responses = await Promise.all([
 1. 1 ~ 6 會在第一波發出去，7 ~ 12 會在第二波發出去
 
 2. 6 次，因為 7 ~ 12 個請求可以重複使用前面的 TCP Connection
-![browserMaxConnection12](../static/img/browserMaxConnection12.jpg)
+   ![browserMaxConnection12](../static/img/browserMaxConnection12.jpg)
+
 ```
 [nodemon] starting `ts-node src/index.ts`
 connection
@@ -178,4 +183,5 @@ const responses = await Promise.all([
 今天我們學到了 HTTP 1.1 HOL Blocking，並且也學到了 HTTP 2 的 multiplexing 機制，希望能讓各位夥伴對 HTTP 更熟悉一點
 
 ## 參考資料
+
 - https://developer.mozilla.org/en-US/docs/Glossary/Head_of_line_blocking

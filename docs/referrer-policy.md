@@ -8,10 +8,10 @@ description: 深入瞭解 Referrer Policy
 上一篇談到使用 fetch API 的參數來設定 `referrerPolicy`，現在要來談談如何從 Server Side 去設定，使用 NodeJS HTTP module 來實作簡易的 HTTP server，設定 `no-referrer`，並且載入跨域的圖片跟影片
 
 ```js
-httpServer.on('request', (req, res) => {
-    res.setHeader("Referrer-Policy", "no-referrer");
-    res.setHeader("Content-Type", "text/html");
-    res.end(`<!DOCTYPE html>
+httpServer.on("request", (req, res) => {
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Content-Type", "text/html");
+  res.end(`<!DOCTYPE html>
 <html>
     <head></head>
     <body>
@@ -62,9 +62,9 @@ fetch("https://www.google.com/", { referrerPolicy: "origin" });
 HTML meta 標籤可以設定全局的 `referrerPolicy`，作用就跟從 Response Header 設定是一樣的，我們調整一下 NodeJS 的程式碼:
 
 ```js
-httpServer.on('request', (req, res) => {
-    res.setHeader("Content-Type", "text/html");
-    res.end(`<!DOCTYPE html>
+httpServer.on("request", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.end(`<!DOCTYPE html>
 <html>
     <head>
         <meta name="referrer" content="origin" />
@@ -84,10 +84,10 @@ httpServer.on('request', (req, res) => {
 另外還有一些常見的 HTML 標籤也都可以 By 請求設定 `referrerPolicy`，例如 `<a>`, `<img>` 跟 `<script>`，我們試著在 NodeJS 加入以下程式碼，並且打開 http://localhost:5000/test/?a=1&b=2
 
 ```js
-httpServer.on('request', (req, res) => {
-    console.log(req.headers.referer);
-    res.setHeader("Content-Type", "text/html");
-    res.end(`<!DOCTYPE html>
+httpServer.on("request", (req, res) => {
+  console.log(req.headers.referer);
+  res.setHeader("Content-Type", "text/html");
+  res.end(`<!DOCTYPE html>
 <html>
     <head>
         <meta name="referrer" content="origin" />
@@ -105,10 +105,9 @@ httpServer.on('request', (req, res) => {
 點擊第一個超連結時，Server Log 預期會收到
 
 ```
-http://localhost:5000/test/?a=1&b=2 
+http://localhost:5000/test/?a=1&b=2
 http://localhost:5000/
 ```
-
 
 第一個是 `<a href="http://localhost:5000/" target="_blank" referrerpolicy="unsafe-url">google</a>`
 
@@ -148,11 +147,11 @@ https://developers.google.com/maps/documentation/embed/get-started
 接著我們參考 [Google Map Embed API 的官方文件](https://developers.google.com/maps/documentation/embed/get-started)，用 NodeJS HTTP Module 建立一個簡單的 HTML 頁面
 
 ```js
-import { createServer } from 'http';
+import { createServer } from "http";
 const httpServer = createServer().listen(5000);
-httpServer.on('request', (req, res) => {
-    res.setHeader("Content-Type", "text/html");
-    res.end(`<iframe
+httpServer.on("request", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.end(`<iframe
   width="600"
   height="450"
   style="border:0"
@@ -180,9 +179,9 @@ Google Maps Platform rejected your request. This IP, site or mobile application 
 結合我們之前學到的 `referrerPolicy`，我們可以修改 `<iframe referrerpolicy>`
 
 ```js
-httpServer.on('request', (req, res) => {
-    res.setHeader("Content-Type", "text/html");
-    res.end(`<iframe
+httpServer.on("request", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.end(`<iframe
   width="600"
   height="450"
   style="border:0"

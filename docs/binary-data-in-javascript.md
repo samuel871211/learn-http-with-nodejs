@@ -9,19 +9,23 @@ description: 深入研究 JavaScript 的 Binary Data
 - 用陣列的方式去理解的話，就是 `Array<byte>`，1 byte = 8 bits，每個 byte 總共可以有 256 種組合
 - 創建的 `ArrayBuffer` 實例，其實就是宣告一塊記憶體空間，但無法直接對這塊記憶體空間進行讀寫
 - 創建一個固定長度 (byte length) 的 `ArrayBuffer`:
+
 ```ts
 const arrayBuffer = new ArrayBuffer(8);
 console.log(arrayBuffer.resizable); // false
 arrayBuffer.resize(0); // TypeError: Method ArrayBuffer.prototype.resize called on incompatible receiver #<ArrayBuffer>
 ```
+
 - 創建一個可變長度 (byte length) 的 `ArrayBuffer`
+
 ```ts
 const resizableArrayBuffer = new ArrayBuffer(8, { maxByteLength: 12 });
 console.log(resizableArrayBuffer.resizable); // true
-resizableArrayBuffer.resize(12); 
+resizableArrayBuffer.resize(12);
 console.log(resizableArrayBuffer.byteLength); // 12
 resizableArrayBuffer.resize(13); // Uncaught RangeError: ArrayBuffer.prototype.resize: Invalid length parameter
 ```
+
 - `ArrayBuffer` 是 `Transferable objects`，概念如以下幾點:
   1. 確保這個 `ArrayBuffer`，只能同時給一個執行緒 (thread) 去讀寫
   2. 承上，當其他執行緒 (例如:Web Workers, Service Workers) 需要讀取這個 `ArrayBuffer`，就可以使用移轉的方式
@@ -41,7 +45,8 @@ resizableArrayBuffer.resize(13); // Uncaught RangeError: ArrayBuffer.prototype.r
   5. `ArrayBuffer` 同時也有提供 `transferToFixedLength` 方法
   ```ts
   const resizableArrayBuffer = new ArrayBuffer(8, { maxByteLength: 12 });
-  const transferredResizableArrayBuffer = resizableArrayBuffer.transferToFixedLength();
+  const transferredResizableArrayBuffer =
+    resizableArrayBuffer.transferToFixedLength();
   console.log(transferredResizableArrayBuffer.resizable); // false
   ```
 
@@ -54,6 +59,7 @@ resizableArrayBuffer.resize(13); // Uncaught RangeError: ArrayBuffer.prototype.r
 - Uint8 區間 = 0 ~ 255
 
 創建一個 `Uint8Array`，指定 `byteLength`
+
 ```ts
 const uint8View = new Uint8Array(2);
 // 預設每個 byte 都是 0
@@ -69,14 +75,16 @@ console.log(uint8.BYTES_PER_ELEMENT); // 1
 ```
 
 創建一個 `Uint8Array`，透過 `ArrayBuffer`
+
 ```ts
 const arrayBuffer = new ArrayBuffer(8);
 const uint8View = new Uint8Array(arrayBuffer);
 ```
 
 創建一個 `Uint8Array`，透過陣列
+
 ```ts
-const uint8View = new Uint8Array([10,20,30]);
+const uint8View = new Uint8Array([10, 20, 30]);
 console.log(uint8View[0]); // 10
 console.log(uint8View[1]); // 20
 console.log(uint8View[2]); // 30
@@ -84,8 +92,9 @@ console.log(uint8View.byteLength); // 3
 ```
 
 創建一個 `Uint8Array`，透過其他 `TypedArray`
+
 ```ts
-const uint8View = new Uint8Array([10,20,30]);
+const uint8View = new Uint8Array([10, 20, 30]);
 const clonedUint8View = new Uint8Array(uint8View);
 clonedUint8View[0] = 100;
 console.log(uint8View[0]); // 10
@@ -95,6 +104,7 @@ console.log(clonedUint8View[0]); // 100
 ### ArrayBuffer vs NodeJS Buffer
 
 根據 [NodeJS 官方文件](https://nodejs.org/api/buffer.html#buffer) 描述
+
 ```
 The Buffer class is a subclass of JavaScript's <Uint8Array> class and extends it with methods that cover additional use cases.
 ```

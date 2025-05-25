@@ -77,13 +77,13 @@ data: This is second line.
       <h1>SSE Test Page</h1>
     </header>
     <script>
-      function handleSSE () {
+      function handleSSE() {
         const containerDiv = document.getElementById("container");
         const eventSource = new EventSource("/sse");
         eventSource.onmessage = (event) => {
           containerDiv.innerText += `${event.data},`;
           if (event.data === "1000") eventSource.close();
-        }
+        };
       }
     </script>
     <main>
@@ -102,10 +102,10 @@ import { join } from "path";
 import httpServer from "../httpServer";
 import { notFoundListener } from "../listeners/notFoundlistener";
 
-const indexHTML = readFileSync(join(__dirname, 'index.html'));
+const indexHTML = readFileSync(join(__dirname, "index.html"));
 const ENDINDEX = 1000;
 
-function generateEventStream (params: {
+function generateEventStream(params: {
   eventName?: string;
   data: string;
   id?: string;
@@ -116,16 +116,13 @@ function generateEventStream (params: {
   if (eventName) eventStream += `event: ${eventName}\n`;
   eventStream += `data: ${data}\n`;
   if (id) eventStream += `id: ${id}\n`;
-  if (
-    typeof retry === 'number' && 
-    Number.isInteger(retry) &&
-    retry > 0
-  ) eventStream += `retry: ${retry}\n`;
-  eventStream += '\n';
+  if (typeof retry === "number" && Number.isInteger(retry) && retry > 0)
+    eventStream += `retry: ${retry}\n`;
+  eventStream += "\n";
   return eventStream;
 }
 
-httpServer.on('request', function requestListener (req, res) {
+httpServer.on("request", function requestListener(req, res) {
   if (req.url === "/") {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(indexHTML);
@@ -139,7 +136,9 @@ httpServer.on('request', function requestListener (req, res) {
     res.setHeader("Cache-Control", "no-cache");
     const timeoutId = setInterval(() => {
       if (index === ENDINDEX) {
-        res.end(generateEventStream({ data: String(index) }), () => clearTimeout(timeoutId));
+        res.end(generateEventStream({ data: String(index) }), () =>
+          clearTimeout(timeoutId),
+        );
         return;
       }
       res.write(generateEventStream({ data: String(index) }));
@@ -148,7 +147,7 @@ httpServer.on('request', function requestListener (req, res) {
     return;
   }
   return notFoundListener(req, res);
-})
+});
 ```
 
 接著我們使用瀏覽器打開 http://localhost:5000/ ，並且點擊按鈕，就會看到如下的結果
@@ -168,7 +167,10 @@ if (req.url === "/sse") {
   // SSE 的目的是 Server > Client 的即時通訊，快取在此情境是多餘的，可能會造成 BUG，故關閉
   res.setHeader("Cache-Control", "no-cache");
   const timeoutId = setInterval(() => {
-    const eventStream = generateEventStream({ data: String(index), eventName: "message" });
+    const eventStream = generateEventStream({
+      data: String(index),
+      eventName: "message",
+    });
     if (index === ENDINDEX) {
       res.end(eventStream, () => clearTimeout(timeoutId));
       return;
@@ -185,16 +187,16 @@ if (req.url === "/sse") {
 前端的程式碼（只列出新增部分）
 
 ```js
-function handleCustomSSE () {
+function handleCustomSSE() {
   const containerDiv = document.getElementById("container");
   const eventSource = new EventSource("/customSSE");
-  eventSource.addEventListener('customEvent1', (event) => {
-    console.log('customEvent1 triggered', event.data);
+  eventSource.addEventListener("customEvent1", (event) => {
+    console.log("customEvent1 triggered", event.data);
     containerDiv.innerText += `${event.data},`;
     if (event.data === "1000") eventSource.close();
   });
-  eventSource.addEventListener('customEvent2', (event) => {
-    console.log('cutsomEvent2 triggered', event.data);
+  eventSource.addEventListener("customEvent2", (event) => {
+    console.log("cutsomEvent2 triggered", event.data);
     containerDiv.innerText += `${event.data},`;
     if (event.data === "1000") eventSource.close();
   });
@@ -216,7 +218,7 @@ if (req.url === "/customSSE") {
   const timeoutId = setInterval(() => {
     const eventStream = generateEventStream({
       data: String(index),
-      eventName: `customEvent${(index % 2) + 1}`
+      eventName: `customEvent${(index % 2) + 1}`,
     });
     if (index === ENDINDEX) {
       res.end(eventStream, () => clearTimeout(timeoutId));
@@ -240,16 +242,22 @@ if (req.url === "/customSSE") {
 前端的程式碼（只列出新增部分）
 
 ```js
-function handleCustomSSEWithId () {
+function handleCustomSSEWithId() {
   const containerDiv = document.getElementById("container");
   const eventSource = new EventSource("/customSSEWithId");
-  eventSource.addEventListener('customEvent1', (event) => {
-    console.log('customEvent1 triggered', { id: event.lastEventId, data: event.data });
+  eventSource.addEventListener("customEvent1", (event) => {
+    console.log("customEvent1 triggered", {
+      id: event.lastEventId,
+      data: event.data,
+    });
     containerDiv.innerText += `${event.data},`;
     if (event.data === "1000") eventSource.close();
   });
-  eventSource.addEventListener('customEvent2', (event) => {
-    console.log('cutsomEvent2 triggered', { id: event.lastEventId, data: event.data });
+  eventSource.addEventListener("customEvent2", (event) => {
+    console.log("cutsomEvent2 triggered", {
+      id: event.lastEventId,
+      data: event.data,
+    });
     containerDiv.innerText += `${event.data},`;
     if (event.data === "1000") eventSource.close();
   });
@@ -272,7 +280,7 @@ if (req.url === "/customSSEWithId") {
     const eventStream = generateEventStream({
       data: String(index),
       eventName: `customEvent${(index % 2) + 1}`,
-      id: crypto.randomUUID() // 主要就新增這行
+      id: crypto.randomUUID(), // 主要就新增這行
     });
     if (index === ENDINDEX) {
       res.end(eventStream, () => clearTimeout(timeoutId));
@@ -296,7 +304,7 @@ if (req.url === "/customSSEWithId") {
 前端的程式碼（只列出新增部分）
 
 ```js
-function handleMultiLineDataSSE () {
+function handleMultiLineDataSSE() {
   const containerDiv = document.getElementById("container");
   const eventSource = new EventSource("/multiLineDataSSE");
   eventSource.onmessage = (event) => {
@@ -330,10 +338,11 @@ if (req.url === "/multiLineDataSSE") {
 ### 使用 fetch API 去戳 SSE Endpoint 會發生什麼事
 
 在瀏覽器的 F12 > Console 輸入以下程式碼
+
 ```js
 fetch("http://localhost:5000/sse")
-  .then(res => res.text())
-  .then(text => console.log(text))
+  .then((res) => res.text())
+  .then((text) => console.log(text));
 ```
 
 因為沒有 eventListener 去監聽，所以就必須等到整包 HTTP Response Payload 都傳輸完畢，才會一次性的收到結果，如此就會造成使用者體驗不佳。
