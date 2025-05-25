@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  
+
   title: 'Learn HTTP With NodeJS',
   tagline: 'Learn HTTP with NodeJS in 30 days!!!',
   favicon: 'favicon/favicon.ico',
@@ -64,6 +64,12 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+
+  markdown: {
+    mermaid: true
+  },
+
+  themes: ['@docusaurus/theme-mermaid'],
 
   themeConfig: {
     image: 'favicon/android-chrome-512x512.png',
