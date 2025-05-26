@@ -58,6 +58,7 @@ const sidebars: SidebarsConfig = {
     "geojson",
     "mqtt",
     // 'nagle\'s algorithm',
+    // 'tcp-finite-state-machine',
     "end",
     // {
     //   type: 'category',
