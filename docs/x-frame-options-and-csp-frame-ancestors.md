@@ -18,24 +18,30 @@ When the attribute is set, the content is treated as being from a unique opaque 
 
 也就是說，當我們設定 `<iframe sandbox src="URL"></iframe>` 的時候，就會限制 `<iframe>` 內的網站行為，但我們可以透過設定多組 `allow-` 的 token 來指定被嵌入的頁面可以執行哪些事情，包含以下：
 
-|             token              |                                                         explain                                                          |
-| :----------------------------: | :----------------------------------------------------------------------------------------------------------------------: |
-|        allow-downloads         |                                               允許透過 `<a download>` 下載                                               |
-|          allow-forms           |                                              允許 `<form onSubmit>` 的執行                                               |
-|          allow-modals          |                                  允許 `alert()`, `confirm()` 等等 `window` 原生的 modal                                  |
-|     allow-orientation-lock     |                                                            -                                                             |
-|       allow-pointer-lock       |                                                            -                                                             |
-|          allow-popups          |                        允許 `open()`, `<a target="_blank">` 以及 `HTMLDialogElement.showModal()`                         |
-| allow-popups-to-escape-sandbox |                                                            -                                                             |
-|       allow-presentation       |                                                            -                                                             |
-|       allow-same-origin        | 允許瀏覽器將 "被嵌入的同源網頁" 視為同源 <br/> 如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源 |
-
-<!-- todo-yusheng 可執行 open 跟 download 跟 onSubmit 跟 alert 嗎 -->
-
+<!-- prettier-ignore -->
+| token | explain |
+| :----: | :----: |
+| allow-downloads | 允許透過 `<a download>` 下載 |
+| allow-forms | 允許 `<form onSubmit>` 的執行 |
+| allow-modals | 允許 `alert()`, `confirm()` 等等 `window` 原生的 modal |
+| allow-orientation-lock | - |
+| allow-pointer-lock | - |
+| allow-popups | 允許 `open()`, `<a target="_blank">` 以及 `HTMLDialogElement.showModal()` |
+| allow-popups-to-escape-sandbox | - |
+| allow-presentation | - |
+| allow-same-origin | 允許瀏覽器將 "被嵌入的同源網頁" 視為同源 <br/> 如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源 |
+| allow-scripts | 允許執行 javascript |
+| allow-top-navigation | 允許被嵌入的頁面可以針對 parent 頁面進行導轉  |
+| allow-top-navigation-by-user-activation | - |
+| allow-top-navigation-to-custom-protocols | - |
 | allow-scripts | 允許執行 javascript |
 | allow-top-navigation | 允許被嵌入的頁面可以針對 parent 頁面進行導轉 |
 | allow-top-navigation-by-user-activation | - |
 | allow-top-navigation-to-custom-protocols | - |
+
+<!-- ```
+Blocked attempt to show beforeunload confirmation dialog on behalf of a frame with different security origin. Protocols, domains, and ports must match.
+``` -->
 
 ### X-Frame-Options: DENY
 
