@@ -57,8 +57,11 @@ const sidebars: SidebarsConfig = {
     "accept-patch-and-accept-post",
     "geojson",
     "mqtt",
-    // 'nagle\'s algorithm',
-    // 'tcp-finite-state-machine',
+    "nmap-http-scripts",
+    "rss",
+    "dot-git",
+    "nagle-algorithm",
+    "tcp-finite-state-machine",
     "end",
     // {
     //   type: 'category',
