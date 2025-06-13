@@ -18,26 +18,100 @@ When the attribute is set, the content is treated as being from a unique opaque 
 
 也就是說，當我們設定 `<iframe sandbox src="URL"></iframe>` 的時候，就會限制 `<iframe>` 內的網站行為，但我們可以透過設定多組 `allow-` 的 token 來指定被嵌入的頁面可以執行哪些事情，包含以下：
 
-<!-- prettier-ignore -->
-| token | explain |
-| :----: | :----: |
-| allow-downloads | 允許透過 `<a download>` 下載 |
-| allow-forms | 允許 `<form onSubmit>` 的執行 |
-| allow-modals | 允許 `alert()`, `confirm()` 等等 `window` 原生的 modal |
-| allow-orientation-lock | - |
-| allow-pointer-lock | - |
-| allow-popups | 允許 `open()`, `<a target="_blank">` 以及 `HTMLDialogElement.showModal()` |
-| allow-popups-to-escape-sandbox | - |
-| allow-presentation | - |
-| allow-same-origin | 允許瀏覽器將 "被嵌入的同源網頁" 視為同源 <br/> 如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源 |
-| allow-scripts | 允許執行 javascript |
-| allow-top-navigation | 允許被嵌入的頁面可以針對 parent 頁面進行導轉  |
-| allow-top-navigation-by-user-activation | - |
-| allow-top-navigation-to-custom-protocols | - |
-| allow-scripts | 允許執行 javascript |
-| allow-top-navigation | 允許被嵌入的頁面可以針對 parent 頁面進行導轉 |
-| allow-top-navigation-by-user-activation | - |
-| allow-top-navigation-to-custom-protocols | - |
+<table>
+  <thead>
+    <tr>
+      <th>token</th>
+      <th>explain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>allow-downloads</td>
+      <td>
+        <ol>
+          <li>允許透過 `<a download>` 下載檔案</li>
+          <li>允許透過 `<a href="file-url">` 下載檔案</li>
+          <li>允許透過 `HTMLAnchorElement.click()` 下載檔案</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>allow-forms</td>
+      <td>允許 `<form onSubmit>` 的執行</td>
+    </tr>
+    <tr>
+      <td>allow-modals</td>
+      <td>
+        <ol>
+          <li>允許 `alert()` 的執行</li>
+          <li>允許 `confirm()` 的執行</li>
+          <li>允許 `print()` 的執行</li>
+          <li>允許 `prompt()` 的執行</li>
+          <li>允許 `beforeunload` event 的執行</li>
+        </ol>
+        以上皆需先設定 `allow-scripts`
+      </td>
+    </tr>
+    <tr>
+      <td>allow-popups</td>
+      <td>
+        <ol>
+          <li>允許 `open()` 的執行，需先設定 `allow-scripts`</li>
+          <li>允許 `<a target="_blank">` 的執行</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>allow-same-origin</td>
+      <td>
+        允許瀏覽器將 "被嵌入的同源網頁" 視為同源 <br/> 
+        如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源
+      </td>
+    </tr>
+    <tr>
+      <td>allow-scripts</td>
+      <td>允許執行 javascript</td>
+    </tr>
+    <tr>
+      <td>allow-top-navigation</td>
+      <td>允許被嵌入的頁面可以使用 `window.top.location` 對 parent 頁面進行導轉</td>
+    </tr>
+    <!-- todo-yus 還沒研究 -->
+    <tr>
+      <td>allow-popups-to-escape-sandbox</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-presentation</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-top-navigation-by-user-activation</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-top-navigation-to-custom-protocols</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-top-navigation-by-user-activation</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-top-navigation-to-custom-protocols</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-orientation-lock</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>allow-pointer-lock</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- ```
 Blocked attempt to show beforeunload confirmation dialog on behalf of a frame with different security origin. Protocols, domains, and ports must match.
