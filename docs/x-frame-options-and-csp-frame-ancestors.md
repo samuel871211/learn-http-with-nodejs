@@ -32,13 +32,19 @@ When the attribute is set, the content is treated as being from a unique opaque 
         <ol>
           <li>允許透過 `<a download>` 下載檔案</li>
           <li>允許透過 `<a href="file-url">` 下載檔案</li>
-          <li>允許透過 `HTMLAnchorElement.click()` 下載檔案</li>
+          <li>允許透過 `HTMLAnchorElement.click()` 下載檔案，需先設定 `allow-scripts`</li>
         </ol>
       </td>
     </tr>
     <tr>
       <td>allow-forms</td>
-      <td>允許 `<form onSubmit>` 的執行</td>
+      <td>
+        允許 `<form action="URL">` 的執行
+        <ol>
+          <li>允許 `<form action="URL"></form>` 可正常送出表單</li>
+          <li>允許 `<dialog><form method="dialog"></form></dialog>` 可正常關閉 dialog</li>
+        </ol>
+      </td>
     </tr>
     <tr>
       <td>allow-modals</td>
@@ -77,35 +83,41 @@ When the attribute is set, the content is treated as being from a unique opaque 
       <td>allow-top-navigation</td>
       <td>允許被嵌入的頁面可以使用 `window.top.location` 對 parent 頁面進行導轉</td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-popups-to-escape-sandbox</td>
+      <td>
+        <ol>
+          <li>允許被嵌入的頁面所開啟的新視窗（需先設定 `allow-popups`）可以跳脫 `<iframe>` 設定的 sandbox</li>
+          <li>應用場景：新聞網站為了營收，透過 iframe 嵌入第三方廣告，第三方廣告頁的 "立即結帳" 會另開購物車頁面，這個購物車頁面，就可以跳脫 `<iframe>` 設定的 sandbox（可以正常執行 JavaScript => 可以正常結帳）</li>
+        </ol>
+      </td>
+    </tr>
+    <!-- todo-yus 還沒研究 -->
+    <tr>
+      <td>allow-top-navigation</td>
       <td>-</td>
     </tr>
+    <!-- todo-yus 還沒研究 -->
+    <tr>
+      <td>allow-top-navigation-by-user-activation</td>
+      <td>-</td>
+    </tr>
+    <!-- todo-yus 還沒研究 -->
+    <tr>
+      <td>allow-top-navigation-to-custom-protocols</td>
+      <td>-</td>
+    </tr>
+    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-presentation</td>
       <td>-</td>
     </tr>
-    <tr>
-      <td>allow-top-navigation-by-user-activation</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>allow-top-navigation-to-custom-protocols</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>allow-top-navigation-by-user-activation</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>allow-top-navigation-to-custom-protocols</td>
-      <td>-</td>
-    </tr>
+    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-orientation-lock</td>
       <td>-</td>
     </tr>
+    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-pointer-lock</td>
       <td>-</td>
@@ -239,7 +251,7 @@ res.setHeader(
 
 ### 參考資料
 
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#self
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors
