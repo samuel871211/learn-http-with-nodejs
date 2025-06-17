@@ -344,7 +344,7 @@ if (req.url === "/case6") {
 
 ### 跟 Server Sent Events 的差別
 
-當初在研究 `Transfer-Encoding: chunked` 的時候，我一直覺得這跟 [SSE](../docs/server-sent-events.md) 的概念很像，但兩者的應用情境略有不同，差異如下：
+當初在研究 `Transfer-Encoding: chunked` 的時候，我一直覺得這跟 [SSE](./server-sent-events.md) 的概念很像，但兩者的應用情境略有不同，差異如下：
 
 |                         |   Transfer-Encoding: chunked   |             Server Sent Events              |
 | :---------------------: | :----------------------------: | :-----------------------------------------: |

@@ -249,7 +249,7 @@ async function sendGzippedBlobToServer(body) {
 
 這時候 Server 有幾種處理方式：
 
-1. Server 自行處理 [MIME sniffing](/content-type-and-mime-type#mime-sniffing)
+1. Server 自行處理 [MIME sniffing](./content-type-and-mime-type#mime-sniffing)
 2. 回傳 400 Bad Request
 3. 其他...
 
