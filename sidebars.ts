@@ -35,7 +35,7 @@ const sidebars: SidebarsConfig = {
         "http/transfer-encoding",
         "http/content-and-accept-encoding",
         "http/sec-fetch",
-        "http/x-frame-options-and-csp-frame-ancestors",
+        "http/iframe-security",
         "http/http-caching-1",
         "http/http-caching-2",
         "http/http-authentication",

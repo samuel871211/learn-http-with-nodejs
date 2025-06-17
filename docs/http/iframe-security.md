@@ -1,12 +1,7 @@
 ---
-title: X-Frame-Options and CSP frame-ancestors
-description: X-Frame-Options and CSP frame-ancestors
+title: iframe security
+description: iframe security
 ---
-
-### X-Frame-Options
-
-- 一句話總結，這個 Response Header 決定該網頁是否可以被 HTML 的 `<iframe>`, `<frame>`, `<embed>` 跟 `<object>` 嵌入
-- 其中，`<frame>`, `<embed>` 跟 `<object>` 都是比較老舊的 HTMLElement，故本篇會著重在 `<iframe>`
 
 ### `<iframe sandbox>`
 
@@ -95,7 +90,12 @@ When the attribute is set, the content is treated as being from a unique opaque 
     <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-top-navigation</td>
-      <td>-</td>
+      <td>
+        <ol>
+          <li>允許被嵌入的頁面可以針對 `window.top` 去導轉，需先設定 `allow-scripts`</li>
+          <li>允許被嵌入的頁面可以使用 `window.top.close()`，需先設定 `allow-scripts`，且 top 頁面是透過 js 打開的</li>
+        </ol>
+      </td>
     </tr>
     <!-- todo-yus 還沒研究 -->
     <tr>
@@ -128,6 +128,11 @@ When the attribute is set, the content is treated as being from a unique opaque 
 <!-- ```
 Blocked attempt to show beforeunload confirmation dialog on behalf of a frame with different security origin. Protocols, domains, and ports must match.
 ``` -->
+
+### X-Frame-Options
+
+- 一句話總結，這個 Response Header 決定該網頁是否可以被 HTML 的 `<iframe>`, `<frame>`, `<embed>` 跟 `<object>` 嵌入
+- 其中，`<frame>`, `<embed>` 跟 `<object>` 都是比較老舊的 HTMLElement，故本篇會著重在 `<iframe>`
 
 ### X-Frame-Options: DENY
 
