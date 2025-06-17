@@ -80,7 +80,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 然後使用瀏覽器打開 http://localhost:5000/case1
 
-![transfer-encoding-http](../static/img/transfer-encoding-http.jpg)
+![transfer-encoding-http](../../static/img/transfer-encoding-http.jpg)
 
 `res.write` 底層，會處理 `\r\n` 以及計算資料 byte length 的邏輯，所以只需寫入資料即可
 
@@ -111,7 +111,7 @@ if (req.url === "/case2") {
 
 然後使用瀏覽器打開 http://localhost:5000/case2
 
-![transfer-encoding-socket](../static/img/transfer-encoding-socket.jpg)
+![transfer-encoding-socket](../../static/img/transfer-encoding-socket.jpg)
 
 可以看到結果跟上面使用 `res.write` 是一樣的
 
@@ -125,7 +125,7 @@ res.socket?.write(
 
 用瀏覽器打開 http://localhost:5000/case2
 
-![err-invalid-chunked-encoding](../static/img/err-invalid-chunked-encoding.jpg)
+![err-invalid-chunked-encoding](../../static/img/err-invalid-chunked-encoding.jpg)
 
 瀏覽器就會噴 `ERR_INVALID_CHUNKED_ENCODING` 的錯誤，代表瀏覽器底層會去解析這個資料，整理完才會顯示給使用者
 
@@ -152,7 +152,7 @@ if (req.url === "/case3") {
 
 用瀏覽器打開 http://localhost:5000/case3 ，一切相安無事
 
-![transfer-encoding-with-content-length](../static/img/transfer-encoding-with-content-length.jpg)
+![transfer-encoding-with-content-length](../../static/img/transfer-encoding-with-content-length.jpg)
 
 如果故意傳送大於資料長度的 `Content-Length` 呢？
 
@@ -169,7 +169,7 @@ if (req.url === "/case3") {
 
 可以看到瀏覽器是相安無事
 
-![transfer-encoding-with-bigger-content-length](../static/img/transfer-encoding-with-bigger-content-length.jpg)
+![transfer-encoding-with-bigger-content-length](../../static/img/transfer-encoding-with-bigger-content-length.jpg)
 
 為什麼會這樣呢？我們來看看 RFC 9112 的定義
 
@@ -255,7 +255,7 @@ if (req.url === "/case4") {
 
 用瀏覽器打開 http://localhost:5000/case4 ，可以看到正確解析成 json
 
-![transfer-encoding-with-json](../static/img/transfer-encoding-with-json.jpg)
+![transfer-encoding-with-json](../../static/img/transfer-encoding-with-json.jpg)
 
 終端機輸入 `curl --raw http://localhost:5000/case4`
 
@@ -297,7 +297,7 @@ if (req.url === "/case5") {
 
 用瀏覽器打開 http://localhost:5000/case5 ，會發現要等 5 秒才會看到結果
 
-![transfer-encoding-with-slow-data](../static/img/transfer-encoding-with-slow-data.jpg)
+![transfer-encoding-with-slow-data](../../static/img/transfer-encoding-with-slow-data.jpg)
 
 使用瀏覽器原生的 `fetch` 時，大家平常都是這樣寫
 
@@ -311,7 +311,7 @@ fetch("URL")
 
 我們可以利用 `ReadableStream` 來達成分塊讀取 Response Body 的功能
 
-![transfer-encoding-with-fetch](../static/img/transfer-encoding-with-fetch.jpg)
+![transfer-encoding-with-fetch](../../static/img/transfer-encoding-with-fetch.jpg)
 
 ### Transfer-Encoding: chunked + Connection: closed
 
@@ -338,7 +338,7 @@ if (req.url === "/case6") {
 
 用瀏覽器打開 http://localhost:5000/case6 ，還是有正常收到資料
 
-![transfer-encoding-with-connection-closed](../static/img/transfer-encoding-with-connection-closed.jpg)
+![transfer-encoding-with-connection-closed](../../static/img/transfer-encoding-with-connection-closed.jpg)
 
 因為 `Connection: closed` 指的是在這次 HTTP 來回的傳輸完畢之後，才關閉 TCP Connection，並不是 Response Header 傳輸完畢之後就直接關閉了，這兩者之間是有差異的．
 

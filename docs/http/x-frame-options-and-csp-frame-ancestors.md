@@ -214,7 +214,7 @@ http5001Server.on("request", function requestListener(req, res) {
 ```
 
 兩者都有設定的情況，CSP 的優先權會高於 `X-Frame-Options`
-![5000DENY+self](../static/img/5000DENY+self.jpg)
+![5000DENY+self](../../static/img/5000DENY+self.jpg)
 
 在 [CSP2](https://www.w3.org/TR/CSP2/#frame-ancestors-and-frame-options) 的官方文件中有描述到這點
 

@@ -107,7 +107,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 我們在瀏覽器輸入 http://localhost:5000/ ，就可以看到陽春的表單了
 
-![HTML FORM](../static/img/multipart-form-html.jpg)
+![HTML FORM](../../static/img/multipart-form-html.jpg)
 
 我們試著送出表單，並且打開 F12 > Network > Payload > view source，應該會看到這個很長的字串
 
@@ -331,7 +331,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 當我們用 chrome 瀏覽器打開 http://localhost:5000/ 時，可以看到瀏覽器將其解析成圖片了！
 
-![mime-sniffing-image-jpeg](../static/img/mime-sniffing-image-jpeg.jpg)
+![mime-sniffing-image-jpeg](../../static/img/mime-sniffing-image-jpeg.jpg)
 
 各間瀏覽器實作 MIME sniffing 的方式都不同，可能包含
 
@@ -390,7 +390,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 這時候用瀏覽器打開 http://localhost:5000/ ，就會看到 MIME sniffing 的機制被禁用，因此產生一堆亂碼了
 
-![no-sniff](./../static/img/no-sniff.jpg)
+![no-sniff](./../../static/img/no-sniff.jpg)
 
 ### 搭配 MIME sniffing 的資安漏洞
 
@@ -422,7 +422,7 @@ httpServer.on("request", function requestListener(req, res) {
 ```
 
 使用瀏覽器打開該頁面，就會執行程式碼
-![mime-sniffing-png-as-script](../static/img/mime-sniffing-png-as-script.jpg)
+![mime-sniffing-png-as-script](../../static/img/mime-sniffing-png-as-script.jpg)
 
 #### 攻擊手法 2：繞過 CSP 限制
 

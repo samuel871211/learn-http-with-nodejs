@@ -26,12 +26,12 @@ httpServer.on("request", (req, res) => {
 
 http://localhost:5000/ ，使用瀏覽器預設的 `Referrer Policy: strict-origin-when-cross-origin` 是合理的，因為請求這個資源時，還沒收到 Server 回傳的 response header，所以使用預設值
 
-![localhostDefaultReferrerPolicy](../static/img/localhostDefaultReferrerPolicy.jpg)
+![localhostDefaultReferrerPolicy](../../static/img/localhostDefaultReferrerPolicy.jpg)
 
 瀏覽器後續解析 HTML，並且請求跨域的圖片跟影片，此時就會套用 Server 回傳的 `Referrer Policy: no-referrer`
 
-![imageWithResponseReferrerPolicy](../static/img/imageWithResponseReferrerPolicy.jpg)
-![videoWithResponseReferrerPolicy](../static/img/videoWithResponseReferrerPolicy.jpg)
+![imageWithResponseReferrerPolicy](../../static/img/imageWithResponseReferrerPolicy.jpg)
+![videoWithResponseReferrerPolicy](../../static/img/videoWithResponseReferrerPolicy.jpg)
 
 ### fetch API 是否也會套用 Response Header 設定的 referrerPolicy？
 
@@ -79,7 +79,7 @@ httpServer.on("request", (req, res) => {
 
 可以看到請求圖片跟影片的 Request Headers 都有帶上 `referrer: http://localhost:5000/` 了
 
-![metaReferrerPolicyOrigin](../static/img/metaReferrerPolicyOrigin.jpg)
+![metaReferrerPolicyOrigin](../../static/img/metaReferrerPolicyOrigin.jpg)
 
 另外還有一些常見的 HTML 標籤也都可以 By 請求設定 `referrerPolicy`，例如 `<a>`, `<img>` 跟 `<script>`，我們試著在 NodeJS 加入以下程式碼，並且打開 http://localhost:5000/test/?a=1&b=2
 
@@ -136,11 +136,11 @@ https://developers.google.com/maps/documentation/javascript/get-api-key#create-a
 
 我們進到 Edit API Key 的頁面
 
-![editGoogleMapAPIKey](../static/img/editGoogleMapAPIKey.jpg)
+![editGoogleMapAPIKey](../../static/img/editGoogleMapAPIKey.jpg)
 
 設定 Website restrictions，限制只有 http://localhost:5000 可以存取
 
-![restrictGoogleMapAPIToWebsite](../static/img/restrictGoogleMapAPIToWebsite.jpg)
+![restrictGoogleMapAPIToWebsite](../../static/img/restrictGoogleMapAPIToWebsite.jpg)
 
 https://developers.google.com/maps/documentation/embed/get-started
 
@@ -168,7 +168,7 @@ httpServer.on("request", (req, res) => {
 
 我們試試看把 Website restrictions 改成 https://www.google.com ，並且儲存
 
-![changeGoogleMapAPIKeyToOtherWebsite](../static/img/changeGoogleMapAPIKeyToOtherWebsite.jpg)
+![changeGoogleMapAPIKeyToOtherWebsite](../../static/img/changeGoogleMapAPIKeyToOtherWebsite.jpg)
 
 儲存後，再度重整 http://localhost:5000/ ，這時候應該就會看到以下錯誤訊息
 

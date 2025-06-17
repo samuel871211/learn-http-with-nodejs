@@ -11,11 +11,11 @@ description: Server-sent events
 
 若仔細觀察 [Claude](https://claude.ai/new) 的 Network，會發現 SSE 其實沒有什麼神奇的魔法，就是在 Response Header 加上 `Content-Type: text/event-stream; charset=utf-8`
 
-![event-stream](../static/img/event-stream.jpg)
+![event-stream](../../static/img/event-stream.jpg)
 
 至於 Response Body 是怎麼傳輸的呢？
 
-![sse-payload](../static/img/sse-payload.jpg)
+![sse-payload](../../static/img/sse-payload.jpg)
 
 可以看到，SSE 本質上就是一個長連結的 HTTP，搭配指定的 `Content-Type` 跟 Response Payload 格式，就可以讓 Server 傳遞多次資料給 Client 端，透過一個 HTTP 請求的來回
 
@@ -152,7 +152,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 接著我們使用瀏覽器打開 http://localhost:5000/ ，並且點擊按鈕，就會看到如下的結果
 
-![sse-no-event](../static/img/sse-no-event.jpg)
+![sse-no-event](../../static/img/sse-no-event.jpg)
 
 當不指定 event 的情況，預設的 event 就是 `message`，所以在 client 端的 javascript 才會透過 `onmessage` 去接收 SSE。
 
@@ -233,7 +233,7 @@ if (req.url === "/customSSE") {
 
 這時候一樣打開瀏覽器 http://localhost:5000/ ，並且點擊按鈕，就會看到兩種不同的 event 囉！
 
-![sse-custom-event](../static/img/sse-custom-event.jpg)
+![sse-custom-event](../../static/img/sse-custom-event.jpg)
 
 ### 加上 id
 
@@ -295,7 +295,7 @@ if (req.url === "/customSSEWithId") {
 
 這時候一樣打開瀏覽器 http://localhost:5000/ ，並且點擊按鈕，就會看到 id 囉！
 
-![sse-custom-event-with-id](../static/img/sse-custom-event-with-id.jpg)
+![sse-custom-event-with-id](../../static/img/sse-custom-event-with-id.jpg)
 
 ### 多行 data
 
@@ -333,7 +333,7 @@ if (req.url === "/multiLineDataSSE") {
 
 打開瀏覽器 http://localhost:5000/ ，並且點擊按鈕，就會看到多行 data 中間被 `\n` 連結起來了。
 
-![sse-multi-line-data](../static/img/sse-multi-line-data.jpg)
+![sse-multi-line-data](../../static/img/sse-multi-line-data.jpg)
 
 ### 使用 fetch API 去戳 SSE Endpoint 會發生什麼事
 
@@ -347,7 +347,7 @@ fetch("http://localhost:5000/sse")
 
 因為沒有 eventListener 去監聽，所以就必須等到整包 HTTP Response Payload 都傳輸完畢，才會一次性的收到結果，如此就會造成使用者體驗不佳。
 
-![sse-with-fetch](../static/img/sse-with-fetch.jpg)
+![sse-with-fetch](../../static/img/sse-with-fetch.jpg)
 
 <!-- todo-yusheng -->
 <!-- ### 使用 fetch API 搭配 ReadableStream 去戳 SSE Endpoint -->

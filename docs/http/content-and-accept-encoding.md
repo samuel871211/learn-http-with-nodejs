@@ -7,7 +7,7 @@ description: Content-Encoding And Accept-Encoding
 
 當我們使用瀏覽器打開任何一個網頁時，F12 > Network > Doc > Request Headers，應該都可以看到 `Accept-Encoding: gzip, deflate, br, zstd`
 
-![Accept-Encoding](../static/img/accept-encoding.jpg)
+![Accept-Encoding](../../static/img/accept-encoding.jpg)
 
 這是瀏覽器預設就會發送的 Request Header，代表瀏覽器支援這些資料壓縮的演算法
 
@@ -87,13 +87,13 @@ httpServer.on("request", function requestListener(req, res) {
 
 使用瀏覽器打開 http://localhost:5000/ ，查看壓縮過後的文件體積
 
-![gzipped-react-18](../static/img/gzipped-react-18.jpg)
-![gzipped-res-header](../static/img/gzipped-res-header.jpg)
+![gzipped-react-18](../../static/img/gzipped-react-18.jpg)
+![gzipped-res-header](../../static/img/gzipped-res-header.jpg)
 
 壓縮後的體積是 28.7 KB，我們再來看看不壓縮的情況
 
-![uncompressed-react-18](../static/img/uncompressed-react-18.jpg)
-![uncompressed-res-header](../static/img/uncompressed-res-header.jpg)
+![uncompressed-react-18](../../static/img/uncompressed-react-18.jpg)
+![uncompressed-res-header](../../static/img/uncompressed-res-header.jpg)
 
 沒壓縮的情況，體積是 113 KB，可以感受到這個壓縮比還是非常有感的
 
@@ -114,7 +114,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 然後重整瀏覽器，應該會看到白頁，並且顯示 `ERR_CONTENT_DECODING_FAILED`，代表瀏覽器無法正確使用 Server 提供的 `Content-Encoding` 進行解壓縮
 
-![wrong-content-encoding](../static/img/wrong-content-encoding.jpg)
+![wrong-content-encoding](../../static/img/wrong-content-encoding.jpg)
 
 ### client 傳送壓縮後的資訊給 server
 
@@ -215,15 +215,15 @@ if (req.url === "/") {
 - Request Header 有正確帶上 `Content-Type` 跟 `Content-Encoding`，並且 `Content-Length` 是壓縮過後的體積
 - Response Header 有正確帶上 `Content-Type`，並且 `Content-Length` 是解壓縮過後的體積
 
-![parse-gzip-header](../static/img/parse-gzip-header.jpg)
+![parse-gzip-header](../../static/img/parse-gzip-header.jpg)
 
 Request Body 是壓縮後的資料
 
-![parse-gzip-req-payload](../static/img/parse-gzip-req-payload.jpg)
+![parse-gzip-req-payload](../../static/img/parse-gzip-req-payload.jpg)
 
 Response body 是解壓縮後的資料
 
-![parse-gzip-req-payload](../static/img/parse-gzip-res-payload.jpg)
+![parse-gzip-req-payload](../../static/img/parse-gzip-res-payload.jpg)
 
 ### Accept-Encoding as Response Header
 
@@ -243,7 +243,7 @@ async function sendGzippedBlobToServer(body) {
 
 重新執行 `main()`，應該會看到 Server 有正確處理 415 Unsupported Media Type 的情況
 
-![post-gzipped-415](../static/img/post-gzipped-415.jpg)
+![post-gzipped-415](../../static/img/post-gzipped-415.jpg)
 
 ### client 端沒有明確指定 Content-Type
 
@@ -269,7 +269,7 @@ async function fetchAndCompressToGzip() {
 
 重新執行 `main()`，應該會看到 Server 有正確處理 400 Bad Request 的情況
 
-![post-gzipped-400](../static/img/post-gzipped-400.jpg)
+![post-gzipped-400](../../static/img/post-gzipped-400.jpg)
 
 <!-- todo-yusheng 可能跟 content-negotiation 主題類似 -->
 

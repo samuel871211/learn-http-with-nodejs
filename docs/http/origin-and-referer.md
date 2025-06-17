@@ -404,7 +404,7 @@ fetch("https://www.google.com", {
 
 實際打開 F12 > Network，發現完全沒有送 referer，這是怎麼回事？
 
-![unsafeURLNotWorkingWhenFileScheme](../static/img/unsafeURLNotWorkingWhenFileScheme.jpg)
+![unsafeURLNotWorkingWhenFileScheme](../../static/img/unsafeURLNotWorkingWhenFileScheme.jpg)
 
 這其實是符合規範的行為，我們看看 W3C 的官方文件怎麼說
 

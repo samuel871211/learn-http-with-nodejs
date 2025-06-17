@@ -57,7 +57,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 結論是，瀏覽器 (chrome v136, edge v136, firefox v138) 都沒有實作自動重新請求
 
-![browser-does-not-implement-retry-after](../static/img/browser-does-not-implement-retry-after.jpg)
+![browser-does-not-implement-retry-after](../../static/img/browser-does-not-implement-retry-after.jpg)
 
 ### undici RetryAgent
 

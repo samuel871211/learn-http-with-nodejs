@@ -217,7 +217,7 @@ maxKeepAliveRequests
 The maximum number of HTTP requests which can be pipelined until the connection is closed by the server. Setting this attribute to 1 will disable HTTP/1.0 keep-alive, as well as HTTP/1.1 keep-alive and pipelining. Setting this to -1 will allow an unlimited amount of pipelined or keep-alive HTTP requests. If not specified, this attribute is set to 100.
 ``` -->
 
-實務上來說，瀏覽器跟 application server（商業邏輯的實現通常會在這一層），中間至少都會墊一層 web server，讓開發者可以更專注在商業邏輯的實現，而不需要關注像是像是 `maxKeepAliveRequests` 跟 `keepAliveTimeout` 這種很細節的東西，但回頭來看，了解 http 的原理跟規範，再來看看 web server 怎麼實作這些，就可以更了解為何需要拆分 web server 跟 application server 了
+實務上來說，瀏覽器跟 application server（商業邏輯的實現通常會在這一層），中間至少都會墊一層 web server，讓開發者可以更專注在商業邏輯的實現，而不需要關注像是 `maxKeepAliveRequests` 跟 `keepAliveTimeout` 這種很細節的東西，但回頭來看，了解 http 的原理跟規範，再來看看 web server 怎麼實作這些，就可以更了解為何需要拆分 web server 跟 application server 了
 
 ### 參考資料
 

@@ -48,7 +48,7 @@ const responses = await Promise.all([
 
 1. 不會，第 7 個 request 被停滯（Stalled）了
 2. 6 次
-   ![browerMaxConnection7](../static/img/browserMaxConnection7.jpg)
+   ![browerMaxConnection7](../../static/img/browserMaxConnection7.jpg)
 
 ```
 [nodemon] starting `ts-node src/index.ts`
@@ -101,7 +101,7 @@ const responses = await Promise.all([
 1. 1 ~ 6 會在第一波發出去，7 ~ 12 會在第二波發出去
 
 2. 6 次，因為 7 ~ 12 個請求可以重複使用前面的 TCP Connection
-   ![browserMaxConnection12](../static/img/browserMaxConnection12.jpg)
+   ![browserMaxConnection12](../../static/img/browserMaxConnection12.jpg)
 
 ```
 [nodemon] starting `ts-node src/index.ts`
@@ -149,7 +149,7 @@ const responses = await Promise.all([
 
 可以看到每個 host 確實都可以同時建立 6 個請求，至於為何 httpstat.us 為何不是 5 秒整收到 response 呢？原因其實有很多，包含 DNS Lookup, SSL, 網路延遲等等，但細節不在本篇的討論範圍，重點是要讓大家看到，後面 6 個 postman 的請求，不需要等到前面 6 個 localhost:5000 的完成
 
-![browserMaxConnection6+6](../static/img/browserMaxConnection6+6.jpg)
+![browserMaxConnection6+6](../../static/img/browserMaxConnection6+6.jpg)
 
 ## HTTP 2 的 multiplexing 機制，解決了 HOL blocking
 
@@ -178,7 +178,7 @@ const responses = await Promise.all([
 
 可以看到第 7 個請求就不需要等待第 1 個請求結束才能發，因為這些請求都是共用同一個 TCP Connection
 
-![HTTP2](../static/img/HTTP2.jpg)
+![HTTP2](../../static/img/HTTP2.jpg)
 
 今天我們學到了 HTTP 1.1 HOL Blocking，並且也學到了 HTTP 2 的 multiplexing 機制，希望能讓各位夥伴對 HTTP 更熟悉一點
 
