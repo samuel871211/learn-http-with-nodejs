@@ -139,7 +139,7 @@ Blocked attempt to show beforeunload confirmation dialog on behalf of a frame wi
 
 ### CSP: frame-ancestors
 
-比 [X-Frame-Options](#X-Frame-Options) 更新的 HTTP Response Header，可以提供更精細的控制，可設定多個白名單
+比 [X-Frame-Options](#x-frame-options) 更新的 HTTP Response Header，可以提供更精細的控制，可設定多個白名單
 
 ### frame-ancestors 'none'
 

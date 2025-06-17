@@ -429,8 +429,8 @@ httpServer.on("request", function requestListener(req, res) {
 - 攻擊者已經在某網站找到 XSS 漏洞（假設：可以在聊天室插入 `<script>`）
 - 但該網站的 `Content-Security-Policy: script-src: self`
 - 攻擊者先上傳一個 html，內容是 `alert("XSS")`
-- 範例：https://learn-http-with-nodejs.web.app/img/mime-sniffing-xss-in-script-src.html
-- 這時候就可以在聊天室插入 `<script src="https://learn-http-with-nodejs.web.app/img/mime-sniffing-xss-in-script-src.html"></script>`
+- 範例：https://yusheng-tech-blog.web.app/img/mime-sniffing-xss-in-script-src.html
+- 這時候就可以在聊天室插入 `<script src="https://yusheng-tech-blog.web.app/img/mime-sniffing-xss-in-script-src.html"></script>`
 - 其他用戶進入聊天室以後就會執行程式碼
 - 透過 `<script>` 引入，雖然 `Content-Type: text/html`，但還是會被瀏覽器 MIME sniffing 成 `text/javascript`
 

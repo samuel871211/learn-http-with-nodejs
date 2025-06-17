@@ -5,12 +5,12 @@ import type * as Preset from "@docusaurus/preset-classic";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "Learn HTTP With NodeJS",
-  tagline: "Learn HTTP with NodeJS in 30 days!!!",
+  title: "Yusheng's Tech Blog",
+  tagline: "This is Yusheng's Tech Blog",
   favicon: "favicon/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://learn-http-with-nodejs.web.app",
+  url: "https://yusheng-tech-blog.web.app",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
@@ -73,7 +73,7 @@ const config: Config = {
   themeConfig: {
     image: "favicon/android-chrome-512x512.png",
     navbar: {
-      title: "Learn HTTP With NodeJS",
+      title: "Yusheng's Tech Blog",
       logo: {
         alt: "Logo",
         src: "favicon/android-chrome-512x512.png",

@@ -15,6 +15,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARN_HTTP_WITH_NODEJS }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YUSHENG_TECH_BLOG }}
           channelId: live
-          projectId: learn-http-with-nodejs
+          projectId: yusheng-tech-blog
