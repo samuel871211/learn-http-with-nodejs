@@ -58,6 +58,7 @@ const sidebars: SidebarsConfig = {
     "geojson",
     "mqtt",
     "nmap-http-scripts",
+    "nmap-mysql-scripts",
     "rss",
     "dot-git",
     "nagle-algorithm",
