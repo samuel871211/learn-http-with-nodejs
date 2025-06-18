@@ -3,6 +3,14 @@ title: iframe security
 description: iframe security
 ---
 
+### 大綱
+
+本篇要來介紹 iframe security，內容包含
+
+1. `<iframe sandbox>`
+2. X-Frame-Options
+3. CSP: frame-ancestors
+
 ### `<iframe sandbox>`
 
 根據 [html.spec.whatwg.org](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox) 的文件描述
@@ -34,10 +42,10 @@ When the attribute is set, the content is treated as being from a unique opaque 
     <tr>
       <td>allow-forms</td>
       <td>
-        允許 `<form action="URL">` 的執行
         <ol>
           <li>允許 `<form action="URL"></form>` 可正常送出表單</li>
           <li>允許 `<dialog><form method="dialog"></form></dialog>` 可正常關閉 dialog</li>
+          <li>允許 `<form><input pattern="\w{3,16}" /></form>` 可正常觸發表單的驗證</li>
         </ol>
       </td>
     </tr>
@@ -51,14 +59,14 @@ When the attribute is set, the content is treated as being from a unique opaque 
           <li>允許 `prompt()` 的執行</li>
           <li>允許 `beforeunload` event 的執行</li>
         </ol>
-        以上皆需先設定 `allow-scripts`
+        💡 以上皆需先設定 `allow-scripts` 💡
       </td>
     </tr>
     <tr>
       <td>allow-popups</td>
       <td>
         <ol>
-          <li>允許 `open()` 的執行，需先設定 `allow-scripts`</li>
+          <li>允許 `open("URL", "_blank")` 的執行，需先設定 `allow-scripts`</li>
           <li>允許 `<a target="_blank">` 的執行</li>
         </ol>
       </td>
@@ -66,17 +74,15 @@ When the attribute is set, the content is treated as being from a unique opaque 
     <tr>
       <td>allow-same-origin</td>
       <td>
-        允許瀏覽器將 "被嵌入的同源網頁" 視為同源 <br/> 
-        如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源
+        <ol>
+          <li>允許瀏覽器將 "被嵌入的同源網頁" 視為同源</li>
+          <li>如果嵌入的網頁為非同源，設定 `allow-same-origin` 還是會被瀏覽器視為非同源</li>
+        </ol>
       </td>
     </tr>
     <tr>
       <td>allow-scripts</td>
       <td>允許執行 javascript</td>
-    </tr>
-    <tr>
-      <td>allow-top-navigation</td>
-      <td>允許被嵌入的頁面可以使用 `window.top.location` 對 parent 頁面進行導轉</td>
     </tr>
     <tr>
       <td>allow-popups-to-escape-sandbox</td>
@@ -87,7 +93,6 @@ When the attribute is set, the content is treated as being from a unique opaque 
         </ol>
       </td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-top-navigation</td>
       <td>
@@ -97,37 +102,415 @@ When the attribute is set, the content is treated as being from a unique opaque 
         </ol>
       </td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-top-navigation-by-user-activation</td>
-      <td>-</td>
+      <td>
+        <ol>
+          <li>`allow-top-navigation` 的子集合，差別是 => 必須由 user 觸發（例如：onClick）</li>
+          <li>承上，若有設定 `allow-top-navigation`，則不需要設定此 token</li>
+        </ol>
+      </td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-top-navigation-to-custom-protocols</td>
-      <td>-</td>
+      <td>同 `allow-top-navigation`，差別是 => 可以導轉到 http 以外的 protocols</td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
-    <tr>
-      <td>allow-presentation</td>
-      <td>-</td>
-    </tr>
-    <!-- todo-yus 還沒研究 -->
     <tr>
       <td>allow-orientation-lock</td>
-      <td>-</td>
+      <td>`lockOrientation()` 已被棄用，本篇不討論</td>
     </tr>
-    <!-- todo-yus 還沒研究 -->
+    <tr>
+      <td>allow-presentation</td>
+      <td>允許被嵌入的網頁使用 `PresentationRequest`（我沒用過）</td>
+    </tr>
     <tr>
       <td>allow-pointer-lock</td>
-      <td>-</td>
+      <td>允許被嵌入的網頁使用 Pointer Lock API（我沒用過）</td>
     </tr>
   </tbody>
 </table>
 
-<!-- ```
-Blocked attempt to show beforeunload confirmation dialog on behalf of a frame with different security origin. Protocols, domains, and ports must match.
-``` -->
+### 實作環節
+
+我們建立以下：
+| 檔案名稱 | 用途 |
+| ---- | ---- |
+| 5000.html | 主網站，等等要透過瀏覽器打開 |
+| 5000sandbox.html | 被嵌入 `<iframe>` 的網站 |
+| 5000sandbox-popup.html | 被嵌入 `<iframe>` 的網站所開啟的新分頁 |
+| index.ts | NodeJS HTTP Server |
+| download.js | 被下載的測試檔案，內容隨意 |
+
+### allow-downloads
+
+5000.html
+
+```html
+<html>
+  <head></head>
+  <body>
+    <h1>5000.html</h1>
+    <style>
+      iframe {
+        width: 100%;
+        height: 300px;
+      }
+    </style>
+
+    <iframe
+      src="http://localhost:5000/sandbox"
+      sandbox="allow-scripts"
+    ></iframe>
+  </body>
+</html>
+```
+
+5000sandbox.html
+
+```html
+<html>
+  <head></head>
+  <body>
+    <h1>5000sandbox.html</h1>
+
+    <h3>allow-downloads</h3>
+    <div>
+      <a download href="http://localhost:5000/download">
+        download file with download attribute
+      </a>
+      <br />
+      <a href="http://localhost:5000/download">
+        navigate to a URL with Content-Disposition: attachment
+      </a>
+      <br />
+      <script>
+        function handleDownload() {
+          const a = document.createElement("a");
+          a.href = "http://localhost:5000/download";
+          a.click();
+        }
+      </script>
+      <button onclick="handleDownload()">download file with js control</button>
+    </div>
+  </body>
+</html>
+```
+
+index.ts
+
+```ts
+import { readFileSync } from "fs";
+import { http5000Server } from "./httpServers";
+import { join } from "path";
+import { faviconListener } from "../listeners/faviconListener";
+import { notFoundListener } from "../listeners/notFoundlistener";
+
+// 為了開發方便，每次 request 都去讀取 static html
+
+http5000Server.removeAllListeners("request");
+http5000Server.on("request", function requestListener(req, res) {
+  if (req.url === "/favicon.ico") return faviconListener(req, res);
+  if (req.url === "/") {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.end(readFileSync(join(__dirname, "5000.html")));
+  }
+  if (req.url === "/sandbox") {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.end(readFileSync(join(__dirname, "5000sandbox.html")));
+  }
+  if (req.url === "/download") {
+    res.setHeader("Content-Type", "text/javascript");
+    res.setHeader("Content-Disposition", "attachment; filename=download.js");
+    return res.end(readFileSync(join(__dirname, "download.js")));
+  }
+  return notFoundListener(req, res);
+});
+```
+
+download.js
+
+```js
+console.log("downloaded js file!!!");
+```
+
+瀏覽器打開 http://localhost:5000/ ，點擊下載連結跟按鈕，會看到以下錯誤訊息
+![not-allow-downloads](../../static/img/not-allow-downloads.jpg)
+
+把 `allow-downloads` 加上去
+
+5000.html
+
+```html
+<iframe
+  src="http://localhost:5000/sandbox"
+  sandbox="allow-scripts allow-downloads"
+></iframe>
+```
+
+重整畫面，點擊下載按鈕，此時就可以正常下載了 ✨✨✨
+
+### allow-forms
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox=""></iframe>
+```
+
+5000sandbox.html
+
+```html
+<h3>allow-forms</h3>
+<form
+  method="post"
+  action="http://localhost:5000/form"
+  enctype="multipart/form-data"
+>
+  <input type="text" placeholder="請輸入帳號" name="username" />
+  <button type="submit">送出</button>
+</form>
+
+<dialog open>
+  <form method="dialog">
+    <input type="text" placeholder="請輸入帳號" name="username" pattern="" />
+    <button type="submit">Close Dialog</button>
+  </form>
+</dialog>
+
+<form
+  method="post"
+  action="http://localhost:5000/form"
+  enctype="multipart/form-data"
+>
+  <input
+    required
+    type="text"
+    placeholder="請輸入帳號(長度4~16)"
+    name="username"
+    pattern="\w{4,16}"
+  />
+  <button type="submit">驗證 && 送出</button>
+</form>
+```
+
+index.ts
+
+```ts
+if (req.url === "/form") {
+  res.setHeader("Content-Type", "text/plain");
+  return res.end("form submitted");
+}
+```
+
+瀏覽器打開 http://localhost:5000/ ，點擊按鈕，會看到以下錯誤訊息
+![not-allow-forms](../../static/img/not-allow-forms.jpg)
+
+把 `allow-forms` 加上去
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox="allow-forms"></iframe>
+```
+
+重整畫面，點擊 submit 按鈕，此時就可以正常表單驗證 & 送出表單了 ✨✨✨
+
+### allow-modals
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox="allow-scripts"></iframe>
+```
+
+5000sandbox.html
+
+```html
+<h3>allow-modals</h3>
+<script>
+  function promptUsername() {
+    const username = prompt("username");
+    console.log(username);
+  }
+  addEventListener("beforeunload", (e) => {
+    e.preventDefault();
+    e.returnValue = "beforeunload";
+    return "beforeunload";
+  });
+</script>
+<button onclick="alert('alert')">alert</button>
+<button onclick="confirm('confirm')">confirm</button>
+<button onclick="print()">print</button>
+<button onclick="promptUsername()">prompt</button>
+```
+
+瀏覽器打開 http://localhost:5000/ ，點擊按鈕，會看到以下錯誤訊息
+![not-allow-modals](../../static/img/not-allow-modals.jpg)
+
+把 `allow-modals` 加上去
+
+5000.html
+
+```html
+<iframe
+  src="http://localhost:5000/sandbox"
+  sandbox="allow-scripts allow-modals"
+></iframe>
+```
+
+重整畫面，點擊按鈕，此時就可以正常跳出 modal 了 ✨✨✨
+
+### allow-popups
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox="allow-scripts"></iframe>
+```
+
+5000sandbox.html
+
+```html
+<h3>allow-popups</h3>
+<div>
+  <script>
+    function openExampleCom() {
+      open("https://example.com/", "_blank");
+    }
+  </script>
+  <a target="_blank" href="https://example.com/">open example.com</a>
+  <button onclick="openExampleCom()">open example.com</button>
+</div>
+```
+
+瀏覽器打開 http://localhost:5000/ ，點擊按鈕，會看到以下錯誤訊息
+![not-allow-popups](../../static/img/not-allow-popups.jpg)
+
+把 `allow-popups` 加上去
+
+5000.html
+
+```html
+<iframe
+  src="http://localhost:5000/sandbox"
+  sandbox="allow-scripts allow-popups"
+></iframe>
+```
+
+重整畫面，點擊按鈕，此時就可以正常開啟新視窗了 ✨✨✨
+
+### allow-popups-to-escape-sandbox
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox="allow-popups"></iframe>
+```
+
+5000sandbox.html
+
+```html
+<h3>allow-popups-to-escape-sandbox</h3>
+<a target="_blank" href="http://localhost:5000/sandbox-popup">另開新頁</a>
+<a target="_self" href="http://localhost:5000/sandbox-popup">原頁導轉</a>
+```
+
+5000sandbox-popup.html
+
+```html
+<html>
+  <head></head>
+  <body>
+    <h1>5000sandbox-popup.html</h1>
+    <h2 id="h2" style="display: none">
+      JavaScript is enabled (allow-popups-to-escape-sandbox)
+    </h2>
+    <script>
+      document.getElementById("h2").style.display = "block";
+    </script>
+    <noscript>
+      <h2>JavaScript is disabled (not-allow-popups-to-escape-sandbox)</h2>
+    </noscript>
+  </body>
+</html>
+```
+
+index.ts
+
+```ts
+if (req.url === "/sandbox-popup") {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  return res.end(readFileSync(join(__dirname, "5000sandbox-popup.html")));
+}
+```
+
+瀏覽器打開 http://localhost:5000/ ，分別點擊兩個按鈕
+
+原頁導轉
+![same-browsing-context](../../static/img/same-browsing-context.jpg)
+
+另開新頁
+![not-allow-popups-to-escape-sandbox](../../static/img/not-allow-popups-to-escape-sandbox.jpg)
+
+把 `allow-popups-to-escape-sandbox` 加上去
+
+5000.html
+
+```html
+<iframe
+  src="http://localhost:5000/sandbox"
+  sandbox="allow-popups allow-popups-to-escape-sandbox"
+></iframe>
+```
+
+重整畫面，分別點擊兩個按鈕
+
+原頁導轉
+![same-browsing-context](../../static/img/same-browsing-context.jpg)
+
+另開新頁
+![allow-popups-to-escape-sandbox](../../static/img/allow-popups-to-escape-sandbox.jpg)
+
+- ✅ 原頁導轉，由於還是同一個 browsing context（不是 popup），所以還是會被 sandbox 限制（不能執行 script）
+- ✅ 另開新頁，吃到 `allow-popups-to-escape-sandbox`，所以可以跳出 sandbox 的限制（可以執行 script）
+
+### allow-top-navigation & allow-top-navigation-by-user-activation
+
+5000.html
+
+```html
+<iframe src="http://localhost:5000/sandbox" sandbox="allow-scripts"></iframe>
+```
+
+5000sandbox.html
+
+```html
+<h3>allow-top-navigation-by-user-activation</h3>
+<script>
+  function navigateTopToExampleCom() {
+    top.location.href = "https://example.com/";
+  }
+</script>
+<button onclick="navigateTopToExampleCom()">
+  top navigation to example.com
+</button>
+```
+
+瀏覽器打開 http://localhost:5000/ ，點擊按鈕，會看到以下錯誤訊息
+![not-allow-top-navigation](../../static/img/not-allow-top-navigation.jpg)
+
+把 `allow-top-navigation` 加上去
+
+5000.html
+
+```html
+<iframe
+  src="http://localhost:5000/sandbox"
+  sandbox="allow-scripts allow-top-navigation"
+></iframe>
+```
+
+重整畫面，點擊按鈕，此時就可以正常把 top window 導轉了 ✨✨✨
 
 ### X-Frame-Options
 
