@@ -3,15 +3,7 @@ title: nmap http scripts
 description: nmap http scripts
 ---
 
-### nmap 環境設定
-
-1. nmap 下載 https://nmap.org/download
-
-### 基本名詞介紹
-
-1. nmap: Network Mapper
-2. NSE: Nmap Scripting Engine
-3. false positive: 誤報
+進入本篇之前，建議先看過 [nmap-basic](../web-security/nmap-basic.md) 呦！
 
 ### 本機 NodeJS http server 環境設定
 

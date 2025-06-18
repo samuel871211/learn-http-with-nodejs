@@ -65,6 +65,7 @@ const sidebars: SidebarsConfig = {
       type: "category",
       label: "web-security",
       items: [
+        "web-security/nmap-basic",
         "web-security/dot-git",
         "web-security/nmap-mysql-scripts",
         "web-security/CVE-2024-4577",
