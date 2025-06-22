@@ -277,11 +277,9 @@ nmap 所有的 scripts 可在 https://nmap.org/nsedoc/scripts/ 查詢，其中 `
 
 ### http-passwd
 
-### http-robots.txt
+檢查 Web Server 是否有 Path Traversal 的漏洞，可以取得 `/etc/passwd` 或是 `/boot.ini`
 
-### http-sitemap-generator
-
-### http-sql-injection
+<!-- ### http-sql-injection -->
 
 ### 參考資料
 
