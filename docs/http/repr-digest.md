@@ -5,4 +5,4 @@ description: Repr digest
 
 ### 參考資料
 
-- Repr digest
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Repr-Digest
