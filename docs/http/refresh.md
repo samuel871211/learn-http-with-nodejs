@@ -42,11 +42,17 @@ httpServer.on("request", function requestListener(req, res) {
 
 ### referrer
 
-調整 NodeJS 的程式碼
+根據 [MDN 文件](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Refresh)的描述
+
+```
+Note: When a refresh redirects to a new page, the Referer header is included in the request for the new page (if permitted by the Referrer-Policy), and document.referrer is set to the referrer URL after navigating.
+```
+
+我們來測試看看，調整 NodeJS 的程式碼
 
 ```ts
 if (req.url === "/") {
-  res.setHeader("Refresh", "3; url=https://localhost:5000/refreshed");
+  res.setHeader("Refresh", "0; url=https://localhost:5000/refreshed");
   res.setHeader("Content-Type", "text/html");
   res.end(`<h1>Your Request ID: ${crypto.randomUUID()}</h1>`);
   return;
@@ -54,16 +60,33 @@ if (req.url === "/") {
 if (req.url == "/refreshed") {
   res.setHeader("Content-Type", "text/html");
   res.end(`
-        <html>
-            <head></head>
-            <body>
-                <div>${JSON.stringify(req.headers, null, 2)}</div>
-                <script>console.log(document.referrer)</script>
-            </body>
-        </html>
-    `);
+    <html>
+      <head></head>
+      <body>
+        <div>req.headers.referrer: ${req.headers.referer}</div>
+        <div id="documentReferrer"></div>
+        <script>
+          document.getElementById("documentReferrer").innerText = "document.referrer: " + document.referrer
+        </script>
+      </body>
+    </html>
+  `);
+  return;
 }
 ```
+
+瀏覽器打開 http://localhost:5000/ ，可以看到 referrer 確實有帶到
+![referrer-5000](../../static/img/referrer-5000.jpg)
+
+### Refresh with javascript protocol
+
+### Redirection order of precedence
+
+### 30x redirect vs refresh
+
+### script redirect vs refresh
+
+### meta refresh vs refresh
 
 ### 參考資料
 
