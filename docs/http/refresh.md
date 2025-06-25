@@ -258,7 +258,9 @@ In other words, the browser will only show the dialog box if the frame or any em
 ![beforeunload](../../static/img/beforeunload.jpg)
 答案是會觸發 beforeunload！
 
-### popState and refresh
+### 小結
+
+本篇文章，帶大家了解 HTTP Refresh 的機制，並且也跟 HTTP Redirect 還有 JavaScript Redirect 去做比較，希望大家收穫滿滿。
 
 ### 參考資料
 
