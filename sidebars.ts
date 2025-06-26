@@ -41,6 +41,7 @@ const sidebars: SidebarsConfig = {
         "http/source-map",
         "http/refresh",
         "http/accept-patch-and-accept-post",
+        "http/strict-transport-security",
         "http/http-caching-1",
         "http/http-caching-2",
         "http/http-authentication",
