@@ -33,7 +33,7 @@ third line\r\n
 
 ### 使用 NodeJS 實作 Transfer-Encoding: chunked
 
-NodeJS HTTP 模組，預設是開啟 `chunked` 傳輸的，線索如下：
+我們來看看 NodeJS HTTP 模組，什麼時候會開啟 `Transfer-Encoding: chunked` 傳輸：
 
 1. 根據 NodeJS 官方文件描述
 
@@ -344,7 +344,9 @@ if (req.url === "/case6") {
 
 ### 跟 Server Sent Events 的差別
 
-當初在研究 `Transfer-Encoding: chunked` 的時候，我一直覺得這跟 [SSE](./server-sent-events.md) 的概念很像，但兩者的應用情境略有不同，差異如下：
+在研究 `Transfer-Encoding: chunked` 的時候，我一直覺得這跟 [SSE](./server-sent-events.md) 的概念很像，後來才發現，其實 SSE 就是 `Transfer-Encoding: chunked` + 把 Response Body 按照指定的文本格式包裝～
+
+兩者的應用情境略有不同，差異如下：
 
 |                         |   Transfer-Encoding: chunked   |             Server Sent Events              |
 | :---------------------: | :----------------------------: | :-----------------------------------------: |
