@@ -44,23 +44,25 @@ const sidebars: SidebarsConfig = {
         "http/strict-transport-security",
         "http/upgrade",
         "http/http-content-negotiation",
-        "http/http-caching-1",
-        "http/http-caching-2",
+        // 恭喜以上都寫完了～～～
+        "http/http-caching-1", // 必讀，想放後面
+        "http/http-caching-2", // 必讀，想放後面
         "http/http-authentication",
         "http/http-redirections",
-        "http/content-security-policy-1",
-        "http/content-security-policy-2",
-        "http/cross-origin-resource-sharing",
-        "http/cross-origin-resource-policy",
+        "http/content-security-policy-1", // 必讀，想放後面
+        "http/content-security-policy-2", // 必讀，想放後面
+        "http/cross-origin-resource-sharing", // 必讀
+        "http/beyond-cors", // 必讀
         "http/http-request-methods",
-        "http/http-response-status-codes",
-        "http/repr-digest",
+        "http/http-response-status-codes", // 感覺可拆
+        "http/http-message-integrity", // 必讀
         "http/user-agent",
         "http/http-observatory-report",
         "http/evolution-of-http",
-        "http/http-2",
-        "http/http-version-negotiation",
-        "http/http-3-and-alt-svc", // 不一定要納入30篇，這個偏難
+        "http/clear-site-data", // 感覺可以水一篇
+        "http/http-2", // 必讀，想放後面
+        "http/http-version-negotiation", // 不一定要納入30篇，這個偏難
+        "http/http-3", // 不一定要納入30篇，這個偏難
         "http/end",
       ],
     },
