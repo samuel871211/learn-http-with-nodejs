@@ -1,6 +1,6 @@
 ---
-title: HTTP caching
-description: HTTP caching
+title: HTTP caching (下篇)
+description: HTTP caching (下篇)
 ---
 
 ### 參考資料
@@ -13,3 +13,5 @@ description: HTTP caching
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Clear-Site-Data
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/412
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/428

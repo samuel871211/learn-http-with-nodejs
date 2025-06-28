@@ -1,6 +1,6 @@
 ---
-title: Content security policy
-description: Content security policy
+title: Content security policy (上篇)
+description: Content security policy (上篇)
 ---
 
 ### 參考資料
