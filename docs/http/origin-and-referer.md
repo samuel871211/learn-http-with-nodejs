@@ -227,7 +227,7 @@ fetch("https://www.google.com", {
 
 ### 3. `origin`
 
-不管怎樣，我就是只送 origin 拉！
+不管怎樣，我就是只送 origin 啦！
 
 我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
@@ -355,7 +355,7 @@ fetch("https://www.google.com", {
 
 ### 8. `unsafe-url`
 
-不管怎樣，我就是送完整的 URL 拉！但會有資安疑慮，所以不建議設定這個
+不管怎樣，我就是送完整的 URL 啦！但會有資安疑慮，所以不建議設定這個
 
 我們試試看在 http://localhost:5000/test?a=1&b=2 這個頁面的 F12 > Console 輸入
 
