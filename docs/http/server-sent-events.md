@@ -1,6 +1,8 @@
 ---
 title: Server-sent events
 description: Server-sent events
+last_update:
+  date: "2025-05-13T08:00:00+08:00"
 ---
 
 ### AI 時代來臨，讓 SSE 技術再次浮上檯面

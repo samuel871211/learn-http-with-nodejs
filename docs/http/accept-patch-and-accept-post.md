@@ -1,6 +1,8 @@
 ---
 title: Accept-Patch and Accept-Post
 description: Accept-Patch and Accept-Post
+last_update:
+  date: "2025-06-25T08:00:00+08:00"
 ---
 
 ### Accept-Patch and Accept-Post 使用情境

@@ -1,6 +1,8 @@
 ---
 title: MQTT
 description: MQTT
+last_update:
+  date: "2025-04-20T08:00:00+08:00"
 ---
 
 ## MQTT 是什麼？

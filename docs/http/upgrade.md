@@ -1,6 +1,8 @@
 ---
 title: Upgrade
 description: Upgrade
+last_update:
+  date: "2025-06-28T08:00:00+08:00"
 ---
 
 ### Upgrade 使用情境

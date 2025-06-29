@@ -1,6 +1,8 @@
 ---
 title: Refresh
 description: Refresh
+last_update:
+  date: "2025-06-25T08:00:00+08:00"
 ---
 
 ### Refresh Response Header

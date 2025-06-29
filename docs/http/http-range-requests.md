@@ -1,6 +1,8 @@
 ---
 title: HTTP Range Requests
 description: HTTP Range Requests
+last_update:
+  date: "2025-06-21T08:00:00+08:00"
 ---
 
 ### 使用時機

@@ -1,6 +1,8 @@
 ---
 title: Strict-Transport-Security
 description: Strict-Transport-Security
+last_update:
+  date: "2025-06-27T08:00:00+08:00"
 ---
 
 ### 語法

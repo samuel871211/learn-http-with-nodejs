@@ -1,6 +1,8 @@
 ---
 title: Content-Type And MIME Type
 description: Content-Type And MIME Type
+last_update:
+  date: "2025-05-12T08:00:00+08:00"
 ---
 
 ### 名詞解釋
@@ -207,10 +209,6 @@ httpServer.on("request", function requestListener(req, res) {
 ```
 
 瀏覽器輸入 http://localhost:5000/ ，就可以成功看到圖片下載囉！
-
-<!-- ### multipart/byteranges -->
-
-<!-- TODO https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Range 也許可以獨立拉成一篇文章，提供完整的程式碼範例(? -->
 
 ### application/x-www-form-urlencoded
 

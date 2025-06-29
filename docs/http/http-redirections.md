@@ -1,6 +1,8 @@
 ---
 title: HTTP redirections
 description: HTTP redirections
+last_update:
+  date: "2025-06-29T08:00:00+08:00"
 ---
 
 ### 前言

@@ -1,6 +1,8 @@
 ---
 title: Origin And Referer
 description: Origin And Referer
+last_update:
+  date: "2025-03-13T08:00:00+08:00"
 ---
 
 ### 行前準備
@@ -419,10 +421,6 @@ If document’s origin is an opaque origin, return no referrer.
 ### 小結
 
 這個章節，我們介紹了 `Origin`, `Referer`, `Referrer-Policy`，以及在 Fetch API 的參數使用 `referrerPolicy` 來控制 request header `Referer`，但其實 `referrerPolicy` 也可以當作 HTTP response header，甚至可以在部分 HTML Element 身上使用！下個章節我們會繼續深入 `referrerPolicy`
-
-<!-- ## Google Map API 使用 Referer 來判斷是否可存取
-
-todo -->
 
 ### 參考資料
 

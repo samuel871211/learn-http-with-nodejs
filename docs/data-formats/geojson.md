@@ -1,6 +1,8 @@
 ---
 title: GeoJSON
 description: GeoJSON
+last_update:
+  date: "2025-04-20T08:00:00+08:00"
 ---
 
 ## Geometry Types

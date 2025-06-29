@@ -1,6 +1,8 @@
 ---
 title: Sec-Fetch
 description: Sec-Fetch
+last_update:
+  date: "2025-05-11T08:00:00+08:00"
 ---
 
 ### Sec-Fetch 是什麼

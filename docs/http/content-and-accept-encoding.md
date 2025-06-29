@@ -1,6 +1,8 @@
 ---
 title: Content-Encoding And Accept-Encoding
 description: Content-Encoding And Accept-Encoding
+last_update:
+  date: "2025-05-03T08:00:00+08:00"
 ---
 
 ### 透過瀏覽器觀察 Accept-Encoding
@@ -270,8 +272,6 @@ async function fetchAndCompressToGzip() {
 重新執行 `main()`，應該會看到 Server 有正確處理 400 Bad Request 的情況
 
 ![post-gzipped-400](../../static/img/post-gzipped-400.jpg)
-
-<!-- todo-yusheng 可能跟 content-negotiation 主題類似 -->
 
 <!-- todo-yusheng 在想這個要不要講 -->
 <!-- ### Compression

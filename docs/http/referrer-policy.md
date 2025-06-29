@@ -1,6 +1,8 @@
 ---
 title: 深入瞭解 Referrer Policy
 description: 深入瞭解 Referrer Policy
+last_update:
+  date: "2025-03-16T08:00:00+08:00"
 ---
 
 ### Response Header 也能設定 referrerPolicy？

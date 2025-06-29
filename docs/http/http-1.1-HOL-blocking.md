@@ -1,6 +1,8 @@
 ---
 title: HTTP 1.1 HOL blocking
 description: HTTP 1.1 HOL blocking
+last_update:
+  date: "2025-03-10T08:00:00+08:00"
 ---
 
 今天要來讓大家實際體驗 HTTP 1.1 HOL (head-of-line) blocking，首先，用 NodeJS http module 建立一個簡易的 http server，為了方便觀察，我們將 server 設定成 2 秒後才會回覆

@@ -1,6 +1,8 @@
 ---
 title: Keep-Alive 和 Connection
 description: Keep-Alive and Connection
+last_update:
+  date: "2025-03-09T08:00:00+08:00"
 ---
 
 在 http 1.0 的世界，預設每個請求都會建立一個 TCP Connection，到了 http 1.1，預設行為變成會保留 TCP Connection，這樣下次再請求同一個 origin 時，就可以重複使用該 TCP Connection，節省三方交握的成本，但具體來說是怎麼實現的呢？

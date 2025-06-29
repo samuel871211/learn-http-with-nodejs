@@ -1,6 +1,8 @@
 ---
 title: Transfer-Encoding
 description: Transfer-Encoding
+last_update:
+  date: "2025-06-27T08:00:00+08:00"
 ---
 
 ### Transfer-Encoding: chunked

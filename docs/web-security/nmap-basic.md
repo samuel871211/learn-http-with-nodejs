@@ -1,6 +1,8 @@
 ---
 title: nmap basic
 description: nmap basic
+last_update:
+  date: "2025-06-18T08:00:00+08:00"
 ---
 
 ### nmap 環境設定
