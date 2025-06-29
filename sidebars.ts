@@ -44,12 +44,12 @@ const sidebars: SidebarsConfig = {
         "http/strict-transport-security",
         "http/upgrade",
         "http/http-redirections",
+        "http/http-request-methods",
         // "http/http-content-negotiation", // 必讀
         // "http/http-authentication", // 必讀
         // "http/beyond-cors", // 必讀
         // "http/http-message-integrity", // 必讀
         // "http/cross-origin-resource-sharing", // 必讀
-        // "http/http-request-methods", // 必讀
         // "http/http-caching-1", // 必讀，想放後面
         // "http/http-caching-2", // 必讀，想放後面
         // "http/content-security-policy-1", // 必讀，想放後面
