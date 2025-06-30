@@ -5,11 +5,11 @@ last_update:
   date: "2025-06-29T08:00:00+08:00"
 ---
 
-### 前言
+## 前言
 
 一直沒有很深入了解 3xx Status Code 有哪些，各代表什麼含意，就趁這篇文章把它搞懂吧！
 
-### Permanent redirections
+## Permanent redirections
 
 - 代表原本的網址已經不再使用了
 - 例如，網站搬家，從 old.example.com 搬到 new.example.com
@@ -21,7 +21,7 @@ last_update:
 The server's response payload usually contains a short hypertext note with a hyperlink to the new URI(s).
 ```
 
-#### 301 Moved Permanently
+### 301 Moved Permanently
 
 - 轉導的 HTTP Request 統一用 GET METHOD 來做導轉，若有 Body 會被捨棄
 
@@ -81,7 +81,7 @@ fetch("http://localhost:5000/301", {
 轉導的 HTTP Request 確實變成 GET，且 Body 被捨棄
 ![301-post](../../static/img/301-post.jpg)
 
-#### 308 Permanent Redirect
+### 308 Permanent Redirect
 
 - 轉導的 HTTP Request Method 跟 Body 不變
 - 使用古老 `<form method="POST" action="http://localhost:5000/308">` 技術的網站，若網站網址更動，就會需要用到 308，而不是 301，也算是為了向後兼容（backward compatibility）
@@ -113,11 +113,11 @@ fetch("http://localhost:5000/308", {
 轉導的 HTTP Request Method 跟 Body 確實不變
 ![308-post](../../static/img/308-post.jpg)
 
-### Temporary redirections
+## Temporary redirections
 
 - 搜尋引擎爬蟲收到 Temporary redirections 之後，不會將轉導的 URL 記錄下來（意思就是原本網站的搜尋引擎排名不會被影響）
 
-#### 302 Found
+### 302 Found
 
 - 根據 [RFC9110](https://www.rfc-editor.org/rfc/rfc9110#section-15.4.3) 的描述
 
@@ -201,7 +201,7 @@ fetch("http://localhost:5000/302", {
 保持原本的 Request Method + Body
 ![302-put302-put](../../static/img/302-put.jpg)
 
-#### 303 See Other
+### 303 See Other
 
 - 轉導的 HTTP Request 統一用 GET METHOD 來做導轉，若有 Body 會被捨棄，同 [301](#301-moved-permanently) 的行為
 - 使用情境： 用戶訂閱電子報 `<form method="POST" action="http://localhost:5000/subscribeEDM">` 後，使用 303 將用戶導到其他頁面（好像蠻合理的，但實務上我沒看過有網站這樣做）
@@ -233,7 +233,7 @@ fetch("http://localhost:5000/303", {
 轉導的 HTTP Request 確實變成 GET，且 Body 被捨棄
 ![303-post.jpg](../../static/img/303-post.jpg)
 
-#### 307 Temporary Redirect
+### 307 Temporary Redirect
 
 - 轉導的 HTTP Request Method 跟 Body 不變，，同 [308](#308-permanent-redirect) 的行為
 
@@ -264,7 +264,7 @@ fetch("http://localhost:5000/307", {
 轉導的 HTTP Request 確實變成 GET，且 Body 被捨棄
 ![307-post.jpg](../../static/img/307-post.jpg)
 
-### 3xx with no Location
+## 3xx with no Location
 
 如果回傳 3xx，但沒有 Location Header，會發生什麼事情呢？
 
@@ -281,7 +281,7 @@ if (req.url === "/301-with-no-location") {
 用瀏覽器打開 http://localhost:5000/301-with-no-location 做個簡單的 GET 請求，沒有噴錯誤訊息，一切平安
 ![301-with-no-location](../../static/img/301-with-no-location.jpg)
 
-### non 3xx with location
+## non 3xx with location
 
 如果回傳 200 + Location Header，會發生什麼事情呢？
 
@@ -365,11 +365,11 @@ truly optional.
 
 結論：RFC 沒有明確禁止 HTTP Client 在 201 的時候使用 Location Header 轉導，但也沒有說 `MAY use the Location field value for automatic redirection`，實務上我沒看過 201 會轉導的，在 Response Body 回傳新建立的資源是比較常見的做法
 
-### 小結
+## 小結
 
 這篇文章，帶大家理解 301, 302, 303, 307, 308 redirect 的差異，也介紹了 201 這個特殊的情境，我自己也學到了很多～
 
-### 參考資料
+## 參考資料
 
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections
 - https://datatracker.ietf.org/doc/html/rfc7231

@@ -5,7 +5,7 @@ last_update:
   date: "2025-05-12T08:00:00+08:00"
 ---
 
-### 名詞解釋
+## 名詞解釋
 
 當我們在說 Content-Type 跟 MIME Type 或是 Media Type 的時候，其實通常都是在說同一件事情，差別在於:
 
@@ -13,11 +13,11 @@ last_update:
 
 2. MIME Type 是比較早期的說法，後改為 Media Type，但兩個其實大家都聽得懂
 
-### Content-Type 的作用
+## Content-Type 的作用
 
 Content-Type 可以做為 HTTP Request Header 跟 HTTP Response Header，其實它指的就是 body 區塊的內容類型
 
-### Web Develop 比較常見的 MIME Type
+## Web Develop 比較常見的 MIME Type
 
 Web Develop 比較常見的 MIME Type 有以下
 
@@ -32,7 +32,7 @@ Web Develop 比較常見的 MIME Type 有以下
 
 我們接著深入一些比較特殊的 Content-Type
 
-### multipart/formdata
+## multipart/formdata
 
 複雜的 HTML FORM 表單，通常會使用這個 Content-Type，我們試著創建一個 `index.html`，裡面包含個人資料填寫的 HTML FORM 表單
 
@@ -175,7 +175,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryC8h6BB9h8kXL7C
 
 由於 Header 會先傳送到 Server 端，之後才是 Body，所以 Server 端就可以根據這個 boundary 來處理每個 part 的資料。至於 Server 端具體來說要怎麼實現 multipart 的解析呢？其實這題蠻複雜的，畢竟檔案上傳有很多坑，光是要處理不同的檔案類型...。，這部分會建議使用現成的 Solution，可以參考 [busboy](https://www.npmjs.com/package/busboy)，這是一個專門處理 form data 的 NodeJS 模組，有興趣的朋友可以研究看看。
 
-### Content-Disposition
+## Content-Disposition
 
 再來我們來看第二個區塊 Content-Disposition，其實這是一個合法的 HTTP Response Header，用來告訴瀏覽器，請求的資源是要呈現在畫面上，還是要當成檔案下載。
 
@@ -210,7 +210,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 瀏覽器輸入 http://localhost:5000/ ，就可以成功看到圖片下載囉！
 
-### application/x-www-form-urlencoded
+## application/x-www-form-urlencoded
 
 接著我們來實作看看 application/x-www-form-urlencoded，這個感覺在現代前端開發也比較少見了，但可以在一些古老的網站看到這種資料傳送的格式。我們創建一個 HTML FORM
 
@@ -307,7 +307,7 @@ encodeURIComponent(
 
 要注意 application/x-www-form-urlencoded 是不能用來上傳檔案的，所以通常是用來處理簡單的情境，比如一般的文字表單
 
-### MIME sniffing
+## MIME sniffing
 
 在特殊情況下，瀏覽器可能認定 Server 回傳的 Content-Type 是錯誤的，這個時候瀏覽器就會啟動 MIME sniffing 機制，嘗試猜測正確的 Content-Type
 
@@ -336,7 +336,7 @@ httpServer.on("request", function requestListener(req, res) {
 1. 讀取副檔名
 2. Magic numbers
 
-### Magic numbers
+## Magic numbers
 
 部分檔案的開頭前幾個 bits 會揭露其檔案類型，俗稱 Magic numbers；透過這個方式，我們就可以得知檔案的類型。
 
@@ -365,7 +365,7 @@ ArrayBuffer { [Uint8Contents]: <ff d8 ff e0>, byteLength: 4 }
 - HEX = 16 進位表達方式
 - ff d8 ff e0 都是 1 個 byte 的排列組合，用 16 進位的表達方式
 
-### X-Content-Type-Options
+## X-Content-Type-Options
 
 上面有提到瀏覽器的 [MIME sniffing](#mime-sniffing) 機制，但有些情況，我們希望把這個機制禁用，這時候就會需要在 Response Header 設定 `X-Content-Type-Options: nosniff`
 
@@ -390,7 +390,7 @@ httpServer.on("request", function requestListener(req, res) {
 
 ![no-sniff](./../../static/img/no-sniff.jpg)
 
-### 搭配 MIME sniffing 的資安漏洞
+## 搭配 MIME sniffing 的資安漏洞
 
 先決條件:
 
@@ -405,7 +405,7 @@ httpServer.on("request", function requestListener(req, res) {
 以下攻擊手法，使用 Chrome v136 瀏覽器，不同瀏覽器會有不同的 MIME sniffing 機制
 </b>
 
-#### 攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
+### 攻擊手法 1：引誘使用者點開假的圖片連結，實際上暗藏 JavaScript 程式碼
 
 NodeJS HTTP 範例
 
@@ -422,7 +422,7 @@ httpServer.on("request", function requestListener(req, res) {
 使用瀏覽器打開該頁面，就會執行程式碼
 ![mime-sniffing-png-as-script](../../static/img/mime-sniffing-png-as-script.jpg)
 
-#### 攻擊手法 2：繞過 CSP 限制
+### 攻擊手法 2：繞過 CSP 限制
 
 - 攻擊者已經在某網站找到 XSS 漏洞（假設：可以在聊天室插入 `<script>`）
 - 但該網站的 `Content-Security-Policy: script-src: self`
@@ -432,13 +432,13 @@ httpServer.on("request", function requestListener(req, res) {
 - 其他用戶進入聊天室以後就會執行程式碼
 - 透過 `<script>` 引入，雖然 `Content-Type: text/html`，但還是會被瀏覽器 MIME sniffing 成 `text/javascript`
 
-### 亂碼是怎麼產生的
+## 亂碼是怎麼產生的
 
 可參考這部影片，講解的非常清楚呦！
 
 https://youtu.be/zSstXi-j7Qc?si=iHu3ebTiF9YtaZmD
 
-### 參考資料
+## 參考資料
 
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types
